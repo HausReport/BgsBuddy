@@ -23,6 +23,7 @@
 # Draught?
 # Infrastructure Failure?
 # Other states?
+import logging
 from typing import List, Dict
 
 from .Status import Status
@@ -70,17 +71,30 @@ class DailyPlan:
         self.systemName = systemName
         self.heroFaction = heroFaction
         self.targetFaction = targetFaction
+        logging.info("Initialized DailyPlan")
 
     def currentlyInTargetSystem(self) -> bool:
         return self.isSystemName(self.currentSystem)
 
     def isSystemName(self, name: str) -> bool:
+        if self.systemName is None:
+            return False
+        if name is None:
+            return False
         return name.lower() == self.systemName.lower()
 
     def isHeroFactionName(self, name: str) -> bool:
+        if self.heroFaction is None:
+            return False
+        if name is None:
+            return False
         return name.lower() == self.heroFaction.lower()
 
     def isTargetFactionName(self, name: str) -> bool:
+        if self.targetFaction is None:
+            return False
+        if name is None:
+            return False
         return name.lower() == self.targetFaction.lower()
 
     def isNeitherFactionName(self, name: str) -> bool:
@@ -195,7 +209,7 @@ class DailyPlan:
         if self.currentlyInTargetSystem():
             factionName = self.currentStationFaction
             if factionName is not None:
-                earnings = entry['TotalEarnings']
+                earnings:int = int(entry['TotalEarnings'])
                 if self.isHeroFactionName(factionName):
                     msg = f"Cartography Contribution for Hero Faction {factionName} of {earnings} credits."
                     ret.append(Status(1, msg, CAT_CARTOGRAPHY, earnings))
@@ -212,8 +226,8 @@ class DailyPlan:
         if self.currentlyInTargetSystem():
             factionName = self.currentStationFaction
             if factionName is not None:
-                cost = entry['Count'] * entry['AvgPricePaid']
-                profit: int = entry['TotalSale'] - cost
+                cost:int = int(entry['Count']) * int(entry['AvgPricePaid'])
+                profit: int = int(entry['TotalSale']) - cost
                 if profit > 0:
                     if self.isHeroFactionName(factionName):
                         msg = f"Positive Trade Contribution for Hero Faction {factionName} of {profit} credits."

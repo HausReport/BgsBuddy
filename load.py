@@ -44,7 +44,8 @@ if not logger.hasHandlers():
     logger.addHandler(logger_channel)
 
 logReporter: LogReporter = LogReporter(logger)
-
+logger.info("Test log msg")
+logging.info("This is a second log msg")
 
 # FACTION_HERO = 1
 # FACTION_NONE = 0
@@ -128,15 +129,15 @@ class EdmClub:
 
 
 cc = EdmClub()
-samplePlan: DailyPlan = DailyPlan("LHS 2477","Federal Reclamation Co","Hodack Prison Colony")
+samplePlan: DailyPlan = DailyPlan("LHS 2477", "Federal Reclamation Co", "Hodack Prison Colony")
 samplePlan.addMissionInfluenceGoal(60)
 samplePlan.addBountyGoal(16000000)
 samplePlan.addCartographyGoal(8000000)
 samplePlan.addTradeProfitGoal(16000000)
 
-
 dailyPlans: DailyPlans = DailyPlans(logReporter)
 dailyPlans.addPlan(samplePlan)
+
 
 #
 # Direct EDMC callbacks to class
@@ -162,8 +163,6 @@ def prefs_changed(cmdr: str, is_beta: bool) -> None:
 
 def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
     return cc.setup_main_ui(parent)
-
-
 
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):

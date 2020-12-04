@@ -26,11 +26,11 @@ class DailyPlans:
 
     def setCurrentStation(self, sta: str):
         for plan in self.plans:
-            plan.setCurrentSystemStation(sta)
+            plan.setCurrentStation(sta)
 
     def setCurrentStationFaction(self, fac:str):
         for plan in self.plans:
-            plan.setCurrentSystemStationFaction(fac)
+            plan.setCurrentStationFaction(fac)
 
 
     #
