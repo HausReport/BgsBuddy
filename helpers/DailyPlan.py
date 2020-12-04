@@ -71,7 +71,13 @@ class DailyPlan:
         self.systemName = systemName
         self.heroFaction = heroFaction
         self.targetFaction = targetFaction
-        logging.info("Initialized DailyPlan")
+        import GlobalDictionaries
+        self.logger = GlobalDictionaries.logger
+        self.logger.info("Initialized DailyPlan")
+        self.logger.debug('This message should go to the log file')
+        self.logger.info('So should this')
+        self.logger.warning('And this, too')
+        self.logger.error('And non-ASCII stuff, too, like Øresund and Malmö')
 
     def currentlyInTargetSystem(self) -> bool:
         return self.isSystemName(self.currentSystem)

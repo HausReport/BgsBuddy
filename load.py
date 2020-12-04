@@ -21,27 +21,7 @@ from helpers.DailyPlan import DailyPlan
 from helpers.DailyPlans import DailyPlans
 from helpers.LogReporter import LogReporter
 
-plugin_name = os.path.basename(os.path.dirname(__file__))
-
-# A Logger is used per 'found' plugin to make it easy to include the plugin's
-# folder name in the logging output format.
-# NB: plugin_name here *must* be the plugin's folder name as per the preceding
-#     code, else the logger won't be properly set up.
-logger = logging.getLogger(f'{appname}.{plugin_name}')
-
-# If the Logger has handlers then it was already set up by the core code, else
-# it needs setting up here.
-if not logger.hasHandlers():
-    level = logging.INFO  # So logger.info(...) is equivalent to print()
-
-    logger.setLevel(level)
-    logger_channel = logging.StreamHandler()
-    logger_formatter = logging.Formatter(
-        f'%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d:%(funcName)s: %(message)s')
-    logger_formatter.default_time_format = '%Y-%m-%d %H:%M:%S'
-    logger_formatter.default_msec_format = '%s.%03d'
-    logger_channel.setFormatter(logger_formatter)
-    logger.addHandler(logger_channel)
+logger = GlobalDictionaries.logger
 
 logReporter: LogReporter = LogReporter(logger)
 logger.info("Test log msg")
@@ -52,7 +32,7 @@ logging.info("This is a second log msg")
 # FACTION_COMPETITOR = -1
 # FACTION_TARGET = -2
 
-class EdmClub:
+class BgsBuddy:
     """
     ClickCounter implements the EDMC plugin interface.
     It adds a button to the EDMC UI that displays the number of times it has been clicked, and a preference to set
@@ -62,7 +42,7 @@ class EdmClub:
     def __init__(self) -> None:
         # Be sure to use names that wont collide in our config variables
         self.click_count: Optional[tk.StringVar] = tk.StringVar(value=str(config.getint('click_counter_count')))
-        logger.info("ClickCounter instantiated")
+        logger.info("BGS Buddy instantiated")
 
     def on_load(self) -> str:
         """
@@ -70,7 +50,7 @@ class EdmClub:
         It is the first point EDMC interacts with our code after loading our module.
         :return: The name of the plugin, which will be used by EDMC for logging and for the settings window
         """
-        return plugin_name
+        return GlobalDictionaries.plugin_name
 
     def on_unload(self) -> None:
         """
@@ -128,7 +108,7 @@ class EdmClub:
         return frame
 
 
-cc = EdmClub()
+cc = BgsBuddy()
 samplePlan: DailyPlan = DailyPlan("LHS 2477", "Federal Reclamation Co", "Hodack Prison Colony")
 samplePlan.addMissionInfluenceGoal(60)
 samplePlan.addBountyGoal(16000000)
@@ -177,9 +157,11 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         dailyPlans.setCurrentStation(station)
         dailyPlans.setCurrentStationFaction(stationFactionName)
         GlobalDictionaries.add_system_and_address(systemName, systemAddress)
+        logger.info(f"Docked: Setting system={systemName}, station={station}, stationFaction={stationFaction}.")
     elif event == 'Undocked':
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
+        logger.info("Undocked: Setting station & stationFaction to none.")
     elif event == 'Location':
         systemName = entry['StarSystem']
         systemAddress = entry['SystemAddress']
@@ -187,14 +169,19 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
         GlobalDictionaries.add_system_and_address(systemName, systemAddress)
+        logger.info(f"Other location: Setting system={systemName}, station=None, stationFaction=None.")
     elif event == 'MissionCompleted':  # get mission influence value
         dailyPlans.checkMissionSuccess(event)
+        logger.info(f"Mission completed.")
     elif (event == 'SellExplorationData') or (event == 'MultiSellExplorationData'):  # get carto data value
         dailyPlans.checkCartography(event)
+        logger.info(f"Sell Exploration Data.")
     elif event == 'RedeemVoucher' and entry['Type'] == 'bounty':  # bounties collected
         dailyPlans.checkBounty(event)
+        logger.info(f"Redeem Bounty.")
     elif event == 'MarketSell':  # Trade Profit
         dailyPlans.checkTrade(event)
+        logger.info(f"Trade.")
     elif event == 'FSDJump' or event == 'CarrierJump':  # get factions at jump
         #
         # Update system stuff
@@ -205,6 +192,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
         GlobalDictionaries.add_system_and_address(systemName, systemAddress)
+        logger.info(f"{event}: Setting system={systemName}, station=None, stationFaction=None.")
 
         # FIXME: Not sure we'd need list of local faction names
         # FIXME: Having a list of faction states, however would be useful for
