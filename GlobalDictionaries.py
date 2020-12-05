@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from typing import Dict
@@ -43,6 +44,7 @@ def add_system_and_address(sys: str, add: str):
     global_system_name_to_address[sys] = add
     sz = len(global_system_address_to_name)
     logger.info(f"Adding sys={sys}, add={add}, nitems={sz}")
+    print(json.dumps(global_system_address_to_name))
 
 
 def get_system_by_address(add: str) -> str:
@@ -51,6 +53,7 @@ def get_system_by_address(add: str) -> str:
     sz = len(global_system_address_to_name)
 
     logger.info(f"Finding sys={ret}, add={add}, nitems={sz}")
+    print(json.dumps(global_system_address_to_name))
     return ret
 
 
@@ -68,8 +71,3 @@ def get_target_faction(targ: str):
     global global_target_factions
 
     return global_target_factions[targ]
-
-
-
-
-

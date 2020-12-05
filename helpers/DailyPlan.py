@@ -182,7 +182,7 @@ class DailyPlan:
                 #from .. import GlobalDictionaries HERE
                 import GlobalDictionaries
                 entrySystemName = GlobalDictionaries.get_system_by_address(entrySystemAddress)
-                self.logger.info(f"SystemAddress: {entrySystemAddress}, SystemName: {entrySystemName}")
+                self.logger.info(f"SystemAddress: {entrySystemAddress}, SystemName: {entrySystemName}, curSys: {self.systemName}")
                 inf = len(influenceEntry['Influence'])
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
                     if self.isHeroFactionName(factionName):

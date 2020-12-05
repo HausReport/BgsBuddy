@@ -148,7 +148,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
 
     if event == 'Docked' or (event == 'Location' and entry['Docked'] == True):
         stationFaction = entry['StationFaction']
-        systemAddress = entry['SystemAddress']
+        systemAddress = str(entry['SystemAddress'])
         systemName = entry['StarSystem']
         stationFactionName = stationFaction['Name']
         dailyPlans.setCurrentSystem(systemName)
@@ -162,7 +162,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         logger.info("Undocked: Setting station & stationFaction to none.")
     elif event == 'Location':
         systemName = entry['StarSystem']
-        systemAddress = entry['SystemAddress']
+        systemAddress = str(entry['SystemAddress'])
         dailyPlans.setCurrentSystem(systemName)
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
@@ -193,7 +193,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     # Update system stuff
     #
         systemName = entry['StarSystem']
-        systemAddress = entry['SystemAddress']
+        systemAddress = str(entry['SystemAddress'])
         dailyPlans.setCurrentSystem(systemName)
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
