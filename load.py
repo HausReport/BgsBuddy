@@ -29,6 +29,7 @@ logReporter: LogReporter = LogReporter(logger)
 logger.info("Test log msg")
 logging.info("This is a second log msg")
 
+
 class BgsBuddy:
     """
     ClickCounter implements the EDMC plugin interface.
@@ -179,10 +180,18 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     elif event == 'MarketSell':  # Trade Profit
         dailyPlans.checkTrade(entry)
         logger.info(f"Trade.")
+    elif event == 'ShipTargeted':  # Target ship
+        if 'PilotName_Localised' in entry and 'Faction' in entry:
+            pilotName = entry['PilotName_Localised']
+            pilotFaction = entry['Faction']
+            logger.info(f"Targeted: {pilotName} from {pilotFaction}")
+            GlobalDictionaries.add_target_faction(pilotName, pilotFaction)
+    elif event == 'CommitCrime' and entry['CrimeType']=='murder':  # Clean Murder
+        dailyPlans.checkMurder(entry)
     elif event == 'FSDJump' or event == 'CarrierJump':  # get factions at jump
-        #
-        # Update system stuff
-        #
+    #
+    # Update system stuff
+    #
         systemName = entry['StarSystem']
         systemAddress = entry['SystemAddress']
         dailyPlans.setCurrentSystem(systemName)
@@ -191,26 +200,26 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         GlobalDictionaries.add_system_and_address(systemName, systemAddress)
         logger.info(f"{event}: Setting system={systemName}, station=None, stationFaction=None.")
 
-        # FIXME: Not sure we'd need list of local faction names
-        # FIXME: Having a list of faction states, however would be useful for
-        # boom/investment bonuses, detecting war/civil war/exotic states
-        #
-        # Update faction stuff
-        #
-        # this.FactionNames = []
-        # this.FactionStates = {'Factions': []}
-        # z = 0
-        # for i in entry['Factions']:
-        #     if i['Name'] == "Pilots' Federation Local Branch":
-        #         continue
-        #
-        #     this.FactionNames.append(i['Name'])
-        #     this.FactionStates['Factions'].append(
-        #         {'Faction': i['Name'], 'Happiness': i['Happiness_Localised'], 'States': []})
-        #
-        #     try:
-        #         for x in i['ActiveStates']:
-        #             this.FactionStates['Factions'][z]['States'].append({'State': x['State']})
-        #     except KeyError:
-        #         this.FactionStates['Factions'][z]['States'].append({'State': 'None'})
-        #     z += 1
+    # FIXME: Not sure we'd need list of local faction names
+    # FIXME: Having a list of faction states, however would be useful for
+    # boom/investment bonuses, detecting war/civil war/exotic states
+    #
+    # Update faction stuff
+    #
+    # this.FactionNames = []
+    # this.FactionStates = {'Factions': []}
+    # z = 0
+    # for i in entry['Factions']:
+    #     if i['Name'] == "Pilots' Federation Local Branch":
+    #         continue
+    #
+    #     this.FactionNames.append(i['Name'])
+    #     this.FactionStates['Factions'].append(
+    #         {'Faction': i['Name'], 'Happiness': i['Happiness_Localised'], 'States': []})
+    #
+    #     try:
+    #         for x in i['ActiveStates']:
+    #             this.FactionStates['Factions'][z]['States'].append({'State': x['State']})
+    #     except KeyError:
+    #         this.FactionStates['Factions'][z]['States'].append({'State': 'None'})
+    #     z += 1

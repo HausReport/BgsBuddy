@@ -8,40 +8,6 @@ global_system_name_to_address: Dict[str,str] = {}
 
 # Npc name, faction name
 global_target_factions : Dict[str,str] = {}
-
-logger = None
-
-def add_system_and_address(sys: str, add: str):
-    global global_system_address_to_name
-    global global_system_name_to_address
-
-    global_system_address_to_name[add] = sys
-    global_system_name_to_address[sys] = add
-
-
-def get_system_by_address(add: str) -> str:
-    global global_system_address_to_name
-
-    return global_system_address_to_name.get(add)
-
-
-def get_address_by_system(sys: str):
-    global global_system_name_to_address
-
-    return global_system_name_to_address.get(sys)
-
-def add_target_faction(targ: str, fac:str):
-    global global_target_factions
-
-    global_target_factions[targ] =  fac
-
-def get_target_faction(targ: str):
-    global global_target_factions
-
-    return global_target_factions[targ]
-
-
-
 try:
     plugin_name
 except NameError:
@@ -69,4 +35,41 @@ def init_logger():
         logger_formatter.default_msec_format = '%s.%03d'
         logger_channel.setFormatter(logger_formatter)
         logger.addHandler(logger_channel)
+
+def add_system_and_address(sys: str, add: str):
+    global global_system_address_to_name
+    global global_system_name_to_address
+    global_system_address_to_name[add] = sys
+    global_system_name_to_address[sys] = add
+    sz = len(global_system_address_to_name)
+    logger.info(f"Adding sys={sys}, add={add}, nitems={sz}")
+
+
+def get_system_by_address(add: str) -> str:
+    global global_system_address_to_name
+    ret:str = global_system_address_to_name.get(add)
+    sz = len(global_system_address_to_name)
+
+    logger.info(f"Finding sys={ret}, add={add}, nitems={sz}")
+    return ret
+
+
+def get_address_by_system(sys: str):
+    global global_system_name_to_address
+
+    return global_system_name_to_address.get(sys)
+
+def add_target_faction(targ: str, fac:str):
+    global global_target_factions
+    logger.info("Adding target to global dict")
+    global_target_factions[targ] =  fac
+
+def get_target_faction(targ: str):
+    global global_target_factions
+
+    return global_target_factions[targ]
+
+
+
+
 

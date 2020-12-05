@@ -28,6 +28,7 @@ from typing import List, Dict
 
 from .Status import Status
 #from ..GlobalDictionaries import *
+import json
 
 CAT_MISSION_SUCCESS = "MissionSuccess"
 CAT_BOUNTY = "Bounty"
@@ -170,6 +171,7 @@ class DailyPlan:
     def checkMissionSuccess(self, entry: Dict) -> List[Status]:
         ret: List[Status] = []
         factionEffects = entry['FactionEffects']
+        print(json.dumps(factionEffects))
 
         for effect in factionEffects:
             factionName = effect['Faction']
@@ -287,23 +289,20 @@ class DailyPlan:
 
     def checkMurder(self, event: Dict) -> List[Status]:
         ret: List[Status] = []
-        a = 4
-        #
-        # If attacks enemy faction in goal system
-        #
-        if a == 0:
-            ret.append(Status(1, "Murder against Enemy Faction", CAT_MURDER, 1))
+        self.logger.info("In checkMurder")
+        if self.currentlyInTargetSystem():
+            self.logger.info("In checkMurder: system good")
+            pilotName = event['Victim']
+            import GlobalDictionaries
+            pilotFaction = GlobalDictionaries.get_target_faction(pilotName)
 
-        #
-        # If attacks hero faction in goal system
-        #
-        if a == 0:
-            ret.append(Status(-1, "Murder against Hero Faction", CAT_MURDER, 1))
-
-        #
-        # If attacks neutral faction in goal system
-        #
-        if a == 0:
-            ret.append(Status(-1, "Murder against Neutral Faction", CAT_MURDER, 1))
+            if pilotFaction is None:
+               self.logger.error(f"Unknown pilot faction in murder check")
+            elif self.isTargetFactionName(pilotFaction):
+                ret.append(Status(1, f"Murder against Enemy Faction: {pilotFaction}", CAT_MURDER, 1))
+            elif self.isHeroFactionName(pilotFaction):
+                ret.append(Status(-1, f"Murder against Hero Faction: {pilotFaction}", CAT_MURDER, 1))
+            else:
+                ret.append(Status(-1, f"Murder against Neutral Faction: {pilotFaction}", CAT_MURDER, 1))
 
         return ret
