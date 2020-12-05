@@ -17,20 +17,17 @@ import myNotebook as nb
 from config import appname, config
 
 import GlobalDictionaries
+
+GlobalDictionaries.init_logger()
+
 from helpers.DailyPlan import DailyPlan
 from helpers.DailyPlans import DailyPlans
 from helpers.LogReporter import LogReporter
 
 logger = GlobalDictionaries.logger
-
 logReporter: LogReporter = LogReporter(logger)
 logger.info("Test log msg")
 logging.info("This is a second log msg")
-
-# FACTION_HERO = 1
-# FACTION_NONE = 0
-# FACTION_COMPETITOR = -1
-# FACTION_TARGET = -2
 
 class BgsBuddy:
     """
@@ -171,16 +168,16 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         GlobalDictionaries.add_system_and_address(systemName, systemAddress)
         logger.info(f"Other location: Setting system={systemName}, station=None, stationFaction=None.")
     elif event == 'MissionCompleted':  # get mission influence value
-        dailyPlans.checkMissionSuccess(event)
+        dailyPlans.checkMissionSuccess(entry)
         logger.info(f"Mission completed.")
     elif (event == 'SellExplorationData') or (event == 'MultiSellExplorationData'):  # get carto data value
-        dailyPlans.checkCartography(event)
+        dailyPlans.checkCartography(entry)
         logger.info(f"Sell Exploration Data.")
     elif event == 'RedeemVoucher' and entry['Type'] == 'bounty':  # bounties collected
-        dailyPlans.checkBounty(event)
+        dailyPlans.checkBounty(entry)
         logger.info(f"Redeem Bounty.")
     elif event == 'MarketSell':  # Trade Profit
-        dailyPlans.checkTrade(event)
+        dailyPlans.checkTrade(entry)
         logger.info(f"Trade.")
     elif event == 'FSDJump' or event == 'CarrierJump':  # get factions at jump
         #

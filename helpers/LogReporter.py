@@ -13,5 +13,5 @@ class LogReporter(Reporter):
         self.logger = logger
 
     def report(self, ret: Status, plan: DailyPlan, event: Dict):
-        if ret.type != 0:
+        if ret.getEffect() != 0:
             self.logger.info( ret.msg)

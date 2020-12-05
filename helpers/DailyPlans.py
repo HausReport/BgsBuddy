@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from .DailyPlan import DailyPlan
 from .LogReporter import LogReporter
+from .Status import Status
 
 
 class DailyPlans:
@@ -31,7 +32,6 @@ class DailyPlans:
     def setCurrentStationFaction(self, fac:str):
         for plan in self.plans:
             plan.setCurrentStationFaction(fac)
-
 
     #
     # Checks against each of the plans in the list
@@ -66,6 +66,7 @@ class DailyPlans:
             ret = plan.checkMurder(event)
             self.report(ret, plan, event)
 
-    def report(self, ret: int, plan: DailyPlan, event: Dict):
-        self.reporter.report(ret, plan, event)
+    def report(self, retList: List[Status], plan: DailyPlan, event: Dict):
+        for ret in retList:
+            self.reporter.report(ret, plan, event)
 

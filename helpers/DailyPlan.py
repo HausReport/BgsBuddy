@@ -71,7 +71,7 @@ class DailyPlan:
         self.systemName = systemName
         self.heroFaction = heroFaction
         self.targetFaction = targetFaction
-        import GlobalDictionaries
+        import GlobalDictionaries   # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
         self.logger = GlobalDictionaries.logger
         self.logger.info("Initialized DailyPlan")
         self.logger.debug('This message should go to the log file')
@@ -177,18 +177,23 @@ class DailyPlan:
             print(factionName)
             for influenceEntry in influenceEntries:
                 entrySystemAddress = str(influenceEntry['SystemAddress'])
-                from .. import GlobalDictionaries
+                #from .. import GlobalDictionaries HERE
+                import GlobalDictionaries
                 entrySystemName = GlobalDictionaries.get_system_by_address(entrySystemAddress)
+                self.logger.info(f"SystemAddress: {entrySystemAddress}, SystemName: {entrySystemName}")
                 inf = len(influenceEntry['Influence'])
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
                     if self.isHeroFactionName(factionName):
                         msg = f"Mission Contribution for Hero Faction {factionName} of {inf} points."
+                        self.logger.info(msg)
                         ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf))
                     elif self.isTargetFactionName(factionName):
                         msg = f"Mission Contribution for Target Faction {factionName} of {inf} points."
+                        self.logger.info(msg)
                         ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
                     else:
                         msg = f"Mission Contribution for Competitor Faction {factionName} of {inf} points."
+                        self.logger.info(msg)
                         ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
 
         return ret

@@ -9,6 +9,7 @@ global_system_name_to_address: Dict[str,str] = {}
 # Npc name, faction name
 global_target_factions : Dict[str,str] = {}
 
+logger = None
 
 def add_system_and_address(sys: str, add: str):
     global global_system_address_to_name
@@ -50,22 +51,22 @@ except NameError:
 # folder name in the logging output format.
 # NB: plugin_name here *must* be the plugin's folder name as per the preceding
 #     code, else the logger won't be properly set up.
-try:
-    logger
-except NameError:
-    logger = logging.getLogger(f'{appname}.{plugin_name}')
 
-# If the Logger has handlers then it was already set up by the core code, else
-# it needs setting up here.
-if not logger.hasHandlers():
-    level = logging.INFO  # So logger.info(...) is equivalent to print()
+def init_logger():
+    global logger
+    logger_name = f'{appname}.{plugin_name}'
+    logger = logging.getLogger(logger_name)
+    # If the Logger has handlers then it was already set up by the core code, else
+    # it needs setting up here.
+    if not logger.hasHandlers():
+        level = logging.INFO  # So logger.info(...) is equivalent to print()
 
-    logger.setLevel(level)
-    logger_channel = logging.StreamHandler()
-    logger_formatter = logging.Formatter(
-        f'%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d:%(funcName)s: %(message)s')
-    logger_formatter.default_time_format = '%Y-%m-%d %H:%M:%S'
-    logger_formatter.default_msec_format = '%s.%03d'
-    logger_channel.setFormatter(logger_formatter)
-    logger.addHandler(logger_channel)
+        logger.setLevel(level)
+        logger_channel = logging.StreamHandler()
+        logger_formatter = logging.Formatter(
+            f'%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d:%(funcName)s: %(message)s')
+        logger_formatter.default_time_format = '%Y-%m-%d %H:%M:%S'
+        logger_formatter.default_msec_format = '%s.%03d'
+        logger_channel.setFormatter(logger_formatter)
+        logger.addHandler(logger_channel)
 
