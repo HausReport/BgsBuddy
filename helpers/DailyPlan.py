@@ -186,15 +186,15 @@ class DailyPlan:
                 inf = len(influenceEntry['Influence'])
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
                     if self.isHeroFactionName(factionName):
-                        msg = f"Mission Contribution for Hero Faction {factionName} of {inf} points."
+                        msg = f"{self.systemName}: {entrySystemName}: Mission Contribution: {inf} points."
                         self.logger.info(msg)
                         ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf))
                     elif self.isTargetFactionName(factionName):
-                        msg = f"Mission Contribution for Target Faction {factionName} of {inf} points."
+                        msg = f"{self.systemName}: {entrySystemName}: Mission Contribution to **ENEMY**: {inf} points."
                         self.logger.info(msg)
                         ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
                     else:
-                        msg = f"Mission Contribution for Competitor Faction {factionName} of {inf} points."
+                        msg = f"{self.systemName}: {entrySystemName}: Mission Contribution to **COMPETITOR**: {inf} points."
                         self.logger.info(msg)
                         ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
 
@@ -207,13 +207,13 @@ class DailyPlan:
                 factionName = z['Faction']
                 bounty = z['Amount']
                 if self.isHeroFactionName(factionName):
-                    msg = f"Bounty Contribution for Hero Faction {factionName} of {bounty} credits."
+                    msg = f"{self.systemName}: {factionName}: Bounty contribution of {bounty:,} credits."
                     ret.append(Status(1, msg, CAT_BOUNTY, bounty))
                 elif self.isTargetFactionName(factionName):
-                    msg = f"Bounty Contribution for Enemy Faction {factionName} of {bounty} credits."
+                    msg = f"{self.systemName}: {factionName}: Bounty contribution of to **ENEMY** of {bounty:,} credits."
                     ret.append(Status(-1, msg, CAT_BOUNTY, bounty))
                 else:
-                    msg = f"Bounty Contribution for Competitor Faction {factionName} of {bounty} credits."
+                    msg = f"{self.systemName}: {factionName}: Bounty contribution of to **COMPETITOR** of {bounty:,} credits."
                     ret.append(Status(-1, msg, CAT_BOUNTY, bounty))
         return ret
 
@@ -224,13 +224,13 @@ class DailyPlan:
             if factionName is not None:
                 earnings:int = int(entry['TotalEarnings'])
                 if self.isHeroFactionName(factionName):
-                    msg = f"Cartography Contribution for Hero Faction {factionName} of {earnings} credits."
+                    msg = f"{self.systemName}: {factionName}: Exploration data sold: {earnings:,} ."
                     ret.append(Status(1, msg, CAT_CARTOGRAPHY, earnings))
                 elif self.isTargetFactionName(factionName):
-                    msg = f"Cartography Contribution for Enemy Faction {factionName} of {earnings} credits."
+                    msg = f"{self.systemName}: {factionName}: Exploration data sold to **ENEMY**: {earnings:,} ."
                     ret.append(Status(-1, msg, CAT_CARTOGRAPHY, earnings))
                 else:
-                    msg = f"Cartography Contribution for Competitor Faction {factionName} of {earnings} credits."
+                    msg = f"{self.systemName}: {factionName}: Exploration data sold to **COMPETITOR**: {earnings:,} ."
                     ret.append(Status(-1, msg, CAT_CARTOGRAPHY, earnings))
         return ret
 
@@ -243,23 +243,23 @@ class DailyPlan:
                 profit: int = int(entry['TotalSale']) - cost
                 if profit > 0:
                     if self.isHeroFactionName(factionName):
-                        msg = f"Positive Trade Contribution for Hero Faction {factionName} of {profit} credits."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} ."
                         ret.append(Status(1, msg, CAT_TRADE_PROFIT, profit))
                     elif self.isTargetFactionName(factionName):
-                        msg = f"Positive Trade Contribution for Enemy Faction {factionName} of {profit} credits."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} ."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                     else:
-                        msg = f"Positive Trade Contribution for Competitor Faction {factionName} of {profit} credits."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} ."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                 else:
                     if self.isTargetFactionName(factionName):
-                        msg = f"Negative Trade Contribution against Enemy Faction {factionName} of {profit} credits."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} ."
                         ret.append(Status(1, msg, CAT_TRADE_LOSS, profit))
                     elif self.isHeroFactionName(factionName):
-                        msg = f"Negative Trade Contribution against Hero Faction {factionName} of {profit} credits."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} ."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit))
                     else:
-                        msg = f"Negative Trade Contribution against Competitor Faction {factionName} of {profit} credits."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} ."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit))
 
         return ret
@@ -299,10 +299,10 @@ class DailyPlan:
             if pilotFaction is None:
                self.logger.error(f"Unknown pilot faction in murder check")
             elif self.isTargetFactionName(pilotFaction):
-                ret.append(Status(1, f"Murder against Enemy Faction: {pilotFaction}", CAT_MURDER, 1))
+                ret.append(Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy", CAT_MURDER, 1))
             elif self.isHeroFactionName(pilotFaction):
-                ret.append(Status(-1, f"Murder against Hero Faction: {pilotFaction}", CAT_MURDER, 1))
+                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **ALLY**", CAT_MURDER, 1))
             else:
-                ret.append(Status(-1, f"Murder against Neutral Faction: {pilotFaction}", CAT_MURDER, 1))
+                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER**", CAT_MURDER, 1))
 
         return ret

@@ -3,17 +3,20 @@ from typing import List, Dict
 from .DailyPlan import DailyPlan
 from .LogReporter import LogReporter
 from .Status import Status
-
+from .Reporter import Reporter
 
 class DailyPlans:
 
     def __init__(self, reporter: LogReporter):
         self.plans: List[DailyPlan] = []
-        self.reporter = reporter
+        self.reporters: List[Reporter] = []
+        self.reporters.append(reporter)
 
     def addPlan(self, plan: DailyPlan):
         self.plans.append(plan)
 
+    def addReporter(self, reporter: Reporter):
+        self.reporters.append(reporter)
     #
     # Updated by DailyPlans as ship moves
     #
@@ -68,5 +71,6 @@ class DailyPlans:
 
     def report(self, retList: List[Status], plan: DailyPlan, event: Dict):
         for ret in retList:
-            self.reporter.report(ret, plan, event)
+            for reporter in self.reporters:
+                reporter.report(ret, plan, event)
 

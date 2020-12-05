@@ -17,6 +17,7 @@ import myNotebook as nb
 from config import appname, config
 
 import GlobalDictionaries
+from helpers.DiscordReporter import DiscordReporter
 
 GlobalDictionaries.init_logger()
 GlobalDictionaries.load_addresses()
@@ -116,7 +117,8 @@ samplePlan.addTradeProfitGoal(16000000)
 
 dailyPlans: DailyPlans = DailyPlans(logReporter)
 dailyPlans.addPlan(samplePlan)
-
+disco = DiscordReporter(logger)
+dailyPlans.addReporter(disco)
 
 #
 # Direct EDMC callbacks to class

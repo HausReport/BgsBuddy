@@ -19,19 +19,16 @@ def load_addresses():
     global global_system_address_to_name
     global global_system_name_to_address
 
-    #cwd = os.path.join('.','plugins','bgsBuddy','addresses.jsonl')
-    #cwd = os.path.abspath(cwd)
     cwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
     cwd = os.path.join(cwd,'addresses.jsonl')
     cwd = os.path.abspath(cwd)
-    #cwd = os.getcwd()
     logger.info(f"Loading addresses from directory {cwd}")
     with open(cwd) as f:
         data = json.load(f)
 
     logger.info(data)
-    global_system_name_to_address = {k: v for k, v in data}
-    global_system_address_to_name = {v: k for k, v in data}
+    global_system_name_to_address = {k: str(v) for k, v in data}
+    global_system_address_to_name = {str(v): k for k, v in data}
 
 # A Logger is used per 'found' plugin to make it easy to include the plugin's
 # folder name in the logging output format.
