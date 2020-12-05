@@ -19,6 +19,7 @@ from config import appname, config
 import GlobalDictionaries
 
 GlobalDictionaries.init_logger()
+GlobalDictionaries.load_addresses()
 
 from helpers.DailyPlan import DailyPlan
 from helpers.DailyPlans import DailyPlans
