@@ -22,12 +22,12 @@ class DiscordReporter(Reporter):
             data["username"] = "EDMC Plugin" #"custom username"
 
             #leave this out if you dont want an embed
-            data["embeds"] = []
-            embed = {}
+            #data["embeds"] = []
+            #embed = {}
             #for all params, see https://discordapp.com/developers/docs/resources/channel#embed-object
-            embed["description"] = "text in embed"
-            embed["title"] = "embed title"
-            data["embeds"].append(embed)
+            #embed["description"] = "text in embed"
+            #embed["title"] = "embed title"
+            #data["embeds"].append(embed)
 
             result = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"})
 

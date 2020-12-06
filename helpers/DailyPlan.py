@@ -27,7 +27,7 @@ import logging
 from typing import List, Dict
 
 from .Status import Status
-#from ..GlobalDictionaries import *
+# from ..GlobalDictionaries import *
 import json
 
 CAT_MISSION_SUCCESS = "MissionSuccess"
@@ -72,7 +72,8 @@ class DailyPlan:
         self.systemName = systemName
         self.heroFaction = heroFaction
         self.targetFaction = targetFaction
-        import GlobalDictionaries   # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
+        import \
+            GlobalDictionaries  # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
         self.logger = GlobalDictionaries.logger
         self.logger.info("Initialized DailyPlan")
         self.logger.debug('This message should go to the log file')
@@ -179,22 +180,23 @@ class DailyPlan:
             print(factionName)
             for influenceEntry in influenceEntries:
                 entrySystemAddress = str(influenceEntry['SystemAddress'])
-                #from .. import GlobalDictionaries HERE
+                # from .. import GlobalDictionaries HERE
                 import GlobalDictionaries
                 entrySystemName = GlobalDictionaries.get_system_by_address(entrySystemAddress)
-                self.logger.info(f"SystemAddress: {entrySystemAddress}, SystemName: {entrySystemName}, curSys: {self.systemName}")
+                self.logger.info(
+                    f"SystemAddress: {entrySystemAddress}, SystemName: {entrySystemName}, curSys: {self.systemName}")
                 inf = len(influenceEntry['Influence'])
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
                     if self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {entrySystemName}: Mission Contribution: {inf} points."
+                        msg = f"{self.systemName}: {factionName}: Mission Contribution: {inf} points."
                         self.logger.info(msg)
                         ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf))
                     elif self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {entrySystemName}: Mission Contribution to **ENEMY**: {inf} points."
+                        msg = f"{self.systemName}: {factionName}: Mission Contribution to **ENEMY**: {inf} points."
                         self.logger.info(msg)
                         ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
                     else:
-                        msg = f"{self.systemName}: {entrySystemName}: Mission Contribution to **COMPETITOR**: {inf} points."
+                        msg = f"{self.systemName}: {factionName}: Mission Contribution to **COMPETITOR**: {inf} points."
                         self.logger.info(msg)
                         ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
 
@@ -222,7 +224,7 @@ class DailyPlan:
         if self.currentlyInTargetSystem():
             factionName = self.currentStationFaction
             if factionName is not None:
-                earnings:int = int(entry['TotalEarnings'])
+                earnings: int = int(entry['TotalEarnings'])
                 if self.isHeroFactionName(factionName):
                     msg = f"{self.systemName}: {factionName}: Exploration data sold: {earnings:,} ."
                     ret.append(Status(1, msg, CAT_CARTOGRAPHY, earnings))
@@ -239,7 +241,7 @@ class DailyPlan:
         if self.currentlyInTargetSystem():
             factionName = self.currentStationFaction
             if factionName is not None:
-                cost:int = int(entry['Count']) * int(entry['AvgPricePaid'])
+                cost: int = int(entry['Count']) * int(entry['AvgPricePaid'])
                 profit: int = int(entry['TotalSale']) - cost
                 if profit > 0:
                     if self.isHeroFactionName(factionName):
@@ -297,7 +299,7 @@ class DailyPlan:
             pilotFaction = GlobalDictionaries.get_target_faction(pilotName)
 
             if pilotFaction is None:
-               self.logger.error(f"Unknown pilot faction in murder check")
+                self.logger.error(f"Unknown pilot faction in murder check")
             elif self.isTargetFactionName(pilotFaction):
                 ret.append(Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy", CAT_MURDER, 1))
             elif self.isHeroFactionName(pilotFaction):
