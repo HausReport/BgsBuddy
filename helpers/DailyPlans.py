@@ -1,3 +1,4 @@
+import json
 from typing import List, Dict
 
 from .DailyPlan import DailyPlan
@@ -84,4 +85,5 @@ class DailyPlans:
     # Marshalling/unmarshalling of plans as JSON(L)
     #
     def to_dict(self):
-        ret: Dict = {}
+        default = lambda o: f"<<non-serializable: {type(o).__qualname__}>>"
+        return json.dumps(self.__dict__, indent=4, default=default)
