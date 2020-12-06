@@ -2,6 +2,7 @@ Short Term
 ==========
 0. Add CMDR name to DiscordReporter output
 A. Move WebHook from DiscoReporter to DailyPlan
+B. Empty targets dict... for example on docking
 1. Mission fails
 2. Read plans from JSON(L) file
 3. Save updates to addresses.jsonl file

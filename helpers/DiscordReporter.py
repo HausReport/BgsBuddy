@@ -8,6 +8,8 @@ from .Reporter import Reporter
 import requests
 import json
 
+#Adapted from https://gist.github.com/Bilka2/5dd2ca2b6e9f3573e0c2defe5d3031b2
+
 class DiscordReporter(Reporter):
     def __init__(self, logger, hookUrl="https://discordapp.com/api/webhooks/784901136946561064/MyLLLTWbJnZWBAgGJlhDxe2rdYOE41qoc03hcNue_rzfWY8HGXayqyLE6VAeO0-72fW1"):
         self.logger = logger

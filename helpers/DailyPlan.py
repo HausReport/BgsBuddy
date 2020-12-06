@@ -116,16 +116,6 @@ class DailyPlan:
     #
     def setCurrentSystem(self, sys: str):
         self.currentSystem: str = sys
-        # self.currentSystemAddress: str = add
-        #
-        # FIXME: Not sure if this makes sense
-        # Say that you log in in a different system and submit a mission,
-        # the systemAddress may not have been set.
-        # Maybe initialize systemaddresses when getting the missions event?
-        #
-        # if self.isSystemName(sys):
-        # if self.systemAddress is None:
-        # self.systemAddress = add
 
     def setCurrentSystemFactions(self, facs: List[str]):
         self.currentSystemFactions: List[str] = facs
