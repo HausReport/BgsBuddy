@@ -15,20 +15,29 @@ try:
 except NameError:
     plugin_name = os.path.basename(os.path.dirname(__file__))
 
+def getDataFilePath(fName: str) -> str:
+    cwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+    cwd = os.path.join(cwd,fName)
+    cwd = os.path.abspath(cwd)
+    return cwd
+
 def load_addresses():
     global global_system_address_to_name
     global global_system_name_to_address
 
-    cwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-    cwd = os.path.join(cwd,'addresses.jsonl')
-    cwd = os.path.abspath(cwd)
+    cwd = getDataFilePath('addresses.jsonl')
     logger.info(f"Loading addresses from directory {cwd}")
     with open(cwd) as f:
         data = json.load(f)
 
-    logger.info(data)
+    #logger.info(data)
     global_system_name_to_address = {k: str(v) for k, v in data}
     global_system_address_to_name = {str(v): k for k, v in data}
+
+def saveLocalDictionary(dictionary: Dict, fName: str):
+    cwd = getDataFilePath(fName)
+    with open(cwd, 'w') as fp:
+        json.dump(dictionary, fp)
 
 # A Logger is used per 'found' plugin to make it easy to include the plugin's
 # folder name in the logging output format.

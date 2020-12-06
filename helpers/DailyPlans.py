@@ -5,6 +5,7 @@ from .LogReporter import LogReporter
 from .Status import Status
 from .Reporter import Reporter
 
+
 class DailyPlans:
 
     def __init__(self, reporter: LogReporter):
@@ -17,6 +18,7 @@ class DailyPlans:
 
     def addReporter(self, reporter: Reporter):
         self.reporters.append(reporter)
+
     #
     # Updated by DailyPlans as ship moves
     #
@@ -32,7 +34,7 @@ class DailyPlans:
         for plan in self.plans:
             plan.setCurrentStation(sta)
 
-    def setCurrentStationFaction(self, fac:str):
+    def setCurrentStationFaction(self, fac: str):
         for plan in self.plans:
             plan.setCurrentStationFaction(fac)
 
@@ -74,3 +76,12 @@ class DailyPlans:
             for reporter in self.reporters:
                 reporter.report(ret, plan, event)
 
+    def setCommanderName(self, cmdr):
+        for reporter in self.reporters:
+            reporter.setCommanderName(cmdr)
+
+    #
+    # Marshalling/unmarshalling of plans as JSON(L)
+    #
+    def to_dict(self):
+        ret: Dict = {}

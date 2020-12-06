@@ -13,3 +13,9 @@ class Reporter(ABC):
     @abstractmethod
     def report(self, ret: Status, plan: DailyPlan, event: Dict):
         pass
+
+    def setCommanderName(self, cmdr):
+        self.commanderName = cmdr
+
+    def getCommanderName(self):
+        return self.commanderName

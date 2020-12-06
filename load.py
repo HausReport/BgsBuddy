@@ -107,7 +107,7 @@ class BgsBuddy:
         nb.Label(frame, textvariable=self.click_count).grid(row=current_row, column=1)
         return frame
 
-
+cmdrNameSet = False
 cc = BgsBuddy()
 samplePlan: DailyPlan = DailyPlan("LHS 2477", "Federal Reclamation Co", "Hodack Prison Colony")
 samplePlan.addMissionInfluenceGoal(60)
@@ -148,6 +148,9 @@ def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     event = entry['event']
+
+    if not cmdrNameSet:
+        dailyPlans.setCommanderName(cmdr)
 
     if event == 'Docked' or (event == 'Location' and entry['Docked'] == True):
         stationFaction = entry['StationFaction']

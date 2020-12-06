@@ -44,7 +44,6 @@ class DailyPlan:
     # Plan statics
     #
     systemName = None
-    # systemAddress = None
     heroFaction = None
     targetFaction = None
 
@@ -52,7 +51,6 @@ class DailyPlan:
     # Movement based
     #
     currentSystem = None
-    # currentSystemAddress = None
     currentSystemFactions = None
     currentStation = None
     currentStationFaction = None
@@ -233,25 +231,26 @@ class DailyPlan:
             if factionName is not None:
                 cost: int = int(entry['Count']) * int(entry['AvgPricePaid'])
                 profit: int = int(entry['TotalSale']) - cost
+                commodity: str = entry['Type']
                 if profit > 0:
                     if self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} ."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} of {commodity}."
                         ret.append(Status(1, msg, CAT_TRADE_PROFIT, profit))
                     elif self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} ."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                     else:
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} ."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                 else:
                     if self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} ."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} of {commodity}."
                         ret.append(Status(1, msg, CAT_TRADE_LOSS, profit))
                     elif self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} ."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit))
                     else:
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} ."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit))
 
         return ret
@@ -298,3 +297,9 @@ class DailyPlan:
                 ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER**", CAT_MURDER, 1))
 
         return ret
+
+    #
+    # Marshalling/unmarshalling of plans as JSON(L)
+    #
+    def to_dict(self):
+        ret: Dict = {}
