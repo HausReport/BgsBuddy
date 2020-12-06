@@ -264,23 +264,23 @@ class DailyPlan:
                 commodity: str = entry['Type']
                 if profit > 0:
                     if self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} {count} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} ({count} of {commodity})."
                         ret.append(Status(1, msg, CAT_TRADE_PROFIT, profit, self.hookUrl))
                     elif self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} {count} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} ({count} of {commodity})."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit, self.hookUrl))
                     else:
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} {count} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} ({count} of {commodity})."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit, self.hookUrl))
                 else:
                     if self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} {count} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} ({count} of {commodity})."
                         ret.append(Status(1, msg, CAT_TRADE_LOSS, profit, self.hookUrl))
                     elif self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} {count} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} ({count} of {commodity})."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit, self.hookUrl))
                     else:
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} {count} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} ({count} of {commodity})."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit, self.hookUrl))
 
         return ret

@@ -2,14 +2,14 @@ import inspect
 import json
 import logging
 import os
-from typing import Dict
+from pprint import pprint
+from typing import Dict, List
+
 try:
     from config import appname
 except ImportError:
     appname = "bgsBuddy"
 
-global_system_address_to_name: Dict[str,str] = {}
-global_system_name_to_address: Dict[str,str] = {}
 
 # Npc name, faction name
 global_target_factions : Dict[str,str] = {}
@@ -24,23 +24,32 @@ def getDataFilePath(fName: str) -> str:
     cwd = os.path.abspath(cwd)
     return cwd
 
-def load_addresses():
-    global global_system_address_to_name
-    global global_system_name_to_address
 
-    cwd = getDataFilePath('addresses.jsonl')
-    logger.info(f"Loading addresses from directory {cwd}")
-    with open(cwd) as f:
-        data = json.load(f)
+cwd = getDataFilePath('addresses.jsonl')
+with open(cwd) as f:
+    data: Dict[str,str] = json.load(f)
 
-    #logger.info(data)
-    global_system_name_to_address = {k: str(v) for k, v in data}
-    global_system_address_to_name = {str(v): k for k, v in data}
+dlen = len(data)
+#logger.info(f"{dlen} items loaded in dict")
+
+global_system_address_to_name: Dict[str,str] = {}
+global_system_name_to_address: Dict[str,str] = {}
+
+for k in data.keys():
+    key = str(k)
+    val = str(data[key])
+    global_system_name_to_address[key] = val
+    global_system_address_to_name[val] = key
 
 def saveLocalDictionary(dictionary: Dict, fName: str):
     cwd = getDataFilePath(fName)
     with open(cwd, 'w') as fp:
         json.dump(dictionary, fp)
+
+#crap: Dict[str,str] = {}
+#for i in range(1,100):
+#crap[str(i)] = str(i)
+#saveLocalDictionary(crap, "crap.jsonl")
 
 # A Logger is used per 'found' plugin to make it easy to include the plugin's
 # folder name in the logging output format.
@@ -72,7 +81,7 @@ def add_system_and_address(sys: str, add: str):
     global_system_name_to_address[sys] = add
     sz = len(global_system_address_to_name)
     logger.info(f"Adding sys={sys}, add={add}, nitems={sz}")
-    print(json.dumps(global_system_address_to_name))
+    #print(json.dumps(global_system_address_to_name))
 
 
 def get_system_by_address(add: str) -> str:
@@ -81,7 +90,6 @@ def get_system_by_address(add: str) -> str:
     sz = len(global_system_address_to_name)
 
     logger.info(f"Finding sys={ret}, add={add}, nitems={sz}")
-    print(json.dumps(global_system_address_to_name))
     return ret
 
 
