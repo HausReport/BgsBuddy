@@ -100,6 +100,6 @@ def get_target_faction(targ: str):
 
     return global_target_factions[targ]
 
-def clear_target_dictionary(targ: str):
+def clear_target_dictionary():
     global global_target_factions
     global_target_factions.clear()
