@@ -131,6 +131,8 @@ samplePlan3.addCartographyGoal(8000000)
 samplePlan3.addTradeProfitGoal(0)
 samplePlan3.addTradeLossGoal(16000000)
 samplePlan3.addMurderGoal(32)
+samplePlan3.setHookUrl("https://discordapp.com/api/webhooks/785228043128012820/uFmUix9PqWhh1cAoYYx1Hsh43VVmGPwCnNQlq5is1vBhqKUTeC2h0-VgDXfmQttuq9UX")
+
 
 dailyPlans: DailyPlans = DailyPlans(logReporter)
 dailyPlans.addPlan(samplePlan)
