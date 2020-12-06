@@ -10,7 +10,7 @@ try:
 except ImportError:
     appname = "bgsBuddy"
 
-
+# test
 # Npc name, faction name
 global_target_factions : Dict[str,str] = {}
 try:
