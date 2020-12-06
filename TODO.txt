@@ -2,15 +2,19 @@ Short Term
 ==========
 0. ~~Add CMDR name to DiscordReporter output~~
 A. Move WebHook from DiscoReporter to DailyPlan, keep it as a list
-B. Empty targets dict sometime that makes sense... maybe on docking
+B. ~~Empty targets dict sometime that makes sense... maybe on docking/jump~~
 1. Handle mission fails in DailyPlan
+1.5 Save sample DailyPlan as JSON(L)
+1.6 Save sample DailyPlans as JSON(L)
 2. Read plans from (remote) JSON(L) file
 3. Save updates to addresses.jsonl file
 4. What makes sense for EDMC GUI?
 5. Figure out what to do with faction states
 6. Add Smuggling lever
-7. Trade - check commodity
+7. ~~Trade - check commodity~~
 8. Trade - check demand
+9. ~~Filter out trades to FleetCarriers.~~
+10. ~~Catch negative inf mission successes.~~
 
 Long Term
 =========

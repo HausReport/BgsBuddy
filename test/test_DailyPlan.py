@@ -20,8 +20,8 @@ class TestDailyPlan(TestCase):
 
 
     def tearDown(self):
-        dv = self.samplePlan.to_dict()
-        pprint(dv)
+        pass
 
     def test_to_dict(self):
-        pass
+        dv = self.samplePlan.to_dict()
+        pprint(dv)

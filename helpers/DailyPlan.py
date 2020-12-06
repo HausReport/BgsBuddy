@@ -28,6 +28,11 @@ from typing import List, Dict
 
 from .Status import Status
 # from ..GlobalDictionaries import *
+try:
+    import GlobalDictionaries
+except ImportError:
+    from .. import GlobalDictionaries
+
 import json
 
 CAT_MISSION_SUCCESS = "MissionSuccess"
@@ -70,8 +75,7 @@ class DailyPlan:
         self.systemName = systemName
         self.heroFaction = heroFaction
         self.targetFaction = targetFaction
-        import \
-            GlobalDictionaries  # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
+        #import GlobalDictionaries  # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
         self.logger = GlobalDictionaries.logger
         self.logger.info("Initialized DailyPlan")
         self.logger.debug('This message should go to the log file')
@@ -169,24 +173,43 @@ class DailyPlan:
             for influenceEntry in influenceEntries:
                 entrySystemAddress = str(influenceEntry['SystemAddress'])
                 # from .. import GlobalDictionaries HERE
-                import GlobalDictionaries
+                #import GlobalDictionaries
                 entrySystemName = GlobalDictionaries.get_system_by_address(entrySystemAddress)
                 self.logger.info(
                     f"SystemAddress: {entrySystemAddress}, SystemName: {entrySystemName}, curSys: {self.systemName}")
-                inf = len(influenceEntry['Influence'])
+                infStr:str = influenceEntry['Influence']
+                inf: int = len(infStr)
+                infSign: int = 1
+                if infStr.startswith("-"):
+                    infSign = -1
+                inf = inf * infSign
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
-                    if self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Mission Contribution: {inf} points."
-                        self.logger.info(msg)
-                        ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf))
-                    elif self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Mission Contribution to **ENEMY**: {inf} points."
-                        self.logger.info(msg)
-                        ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
-                    else:
-                        msg = f"{self.systemName}: {factionName}: Mission Contribution to **COMPETITOR**: {inf} points."
-                        self.logger.info(msg)
-                        ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
+                    if inf>0 :
+                        if self.isHeroFactionName(factionName):
+                            msg = f"{self.systemName}: {factionName}: Mission Contribution: {inf} points."
+                            self.logger.info(msg)
+                            ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf))
+                        elif self.isTargetFactionName(factionName):
+                            msg = f"{self.systemName}: {factionName}: Mission Contribution to **ENEMY**: {inf} points."
+                            self.logger.info(msg)
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
+                        else:
+                            msg = f"{self.systemName}: {factionName}: Mission Contribution to **COMPETITOR**: {inf} points."
+                            self.logger.info(msg)
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
+                    elif inf<0:
+                        if self.isHeroFactionName(factionName):
+                            msg = f"{self.systemName}: {factionName}: Negative Mission Contribution to **ALLY**: {inf} points."
+                            self.logger.info(msg)
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
+                        elif self.isTargetFactionName(factionName):
+                            msg = f"{self.systemName}: {factionName}: Negative Mission Contribution to ENEMY: {inf} points."
+                            self.logger.info(msg)
+                            ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf))
+                        else:
+                            msg = f"{self.systemName}: {factionName}: Negative Mission Contribution to **COMPETITOR**: {inf} points."
+                            self.logger.info(msg)
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf))
 
         return ret
 
@@ -228,29 +251,30 @@ class DailyPlan:
         ret: List[Status] = []
         if self.currentlyInTargetSystem():
             factionName = self.currentStationFaction
-            if factionName is not None:
-                cost: int = int(entry['Count']) * int(entry['AvgPricePaid'])
+            if factionName is not None and factionName != "FleetCarrier":
+                count: int = int(entry['Count'])
+                cost: int = count * int(entry['AvgPricePaid'])
                 profit: int = int(entry['TotalSale']) - cost
                 commodity: str = entry['Type']
                 if profit > 0:
                     if self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} {count} of {commodity}."
                         ret.append(Status(1, msg, CAT_TRADE_PROFIT, profit))
                     elif self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} {count} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                     else:
-                        msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} {count} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit))
                 else:
                     if self.isTargetFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} {count} of {commodity}."
                         ret.append(Status(1, msg, CAT_TRADE_LOSS, profit))
                     elif self.isHeroFactionName(factionName):
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} {count} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit))
                     else:
-                        msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} of {commodity}."
+                        msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} {count} of {commodity}."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit))
 
         return ret
@@ -302,4 +326,5 @@ class DailyPlan:
     # Marshalling/unmarshalling of plans as JSON(L)
     #
     def to_dict(self):
-        ret: Dict = {}
+        default = lambda o: f"<<non-serializable: {type(o).__qualname__}>>"
+        return json.dumps(self.__dict__, indent=4, default=default)

@@ -20,7 +20,7 @@ class DiscordReporter(Reporter):
             url = self.hook
             data = {}
             #for all params, see https://discordapp.com/developers/docs/resources/webhook#execute-webhook
-            data["content"] = self.getCommanderName() + ":" + ret.msg # "message content"
+            data["content"] = self.getCommanderName() + " : " + ret.msg # "message content"
             data["username"] = "EDMC Plugin" #"custom username"
 
             #leave this out if you dont want an embed

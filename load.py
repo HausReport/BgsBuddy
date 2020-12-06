@@ -13,8 +13,11 @@ import os
 import tkinter as tk
 from typing import Optional
 
-import myNotebook as nb
-from config import appname, config
+try:
+    import myNotebook as nb
+    from config import appname, config
+except ImportError:
+    pass
 
 import GlobalDictionaries
 from helpers.DiscordReporter import DiscordReporter
@@ -162,6 +165,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         dailyPlans.setCurrentStationFaction(stationFactionName)
         GlobalDictionaries.add_system_and_address(systemName, systemAddress)
         logger.info(f"Docked: Setting system={systemName}, station={station}, stationFaction={stationFaction}.")
+        GlobalDictionaries.clear_target_dictionary()
     elif event == 'Undocked':
         dailyPlans.setCurrentStation(None)
         dailyPlans.setCurrentStationFaction(None)
@@ -206,6 +210,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         GlobalDictionaries.add_system_and_address(systemName, systemAddress)
         logger.info(f"{event}: Setting system={systemName}, station=None, stationFaction=None.")
 
+        GlobalDictionaries.clear_target_dictionary()
     # FIXME: Not sure we'd need list of local faction names
     # FIXME: Having a list of faction states, however would be useful for
     # boom/investment bonuses, detecting war/civil war/exotic states

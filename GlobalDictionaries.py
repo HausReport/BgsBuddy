@@ -3,7 +3,10 @@ import json
 import logging
 import os
 from typing import Dict
-from config import appname
+try:
+    from config import appname
+except ImportError:
+    appname = "bgsBuddy"
 
 global_system_address_to_name: Dict[str,str] = {}
 global_system_name_to_address: Dict[str,str] = {}
@@ -96,3 +99,7 @@ def get_target_faction(targ: str):
     global global_target_factions
 
     return global_target_factions[targ]
+
+def clear_target_dictionary(targ: str):
+    global global_target_factions
+    global_target_factions.clear()
