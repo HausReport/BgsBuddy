@@ -23,7 +23,7 @@ import GlobalDictionaries
 from helpers.DiscordReporter import DiscordReporter
 
 GlobalDictionaries.init_logger()
-GlobalDictionaries.load_addresses()
+#GlobalDictionaries.load_addresses()
 
 from helpers.DailyPlan import DailyPlan
 from helpers.DailyPlans import DailyPlans
@@ -123,6 +123,8 @@ samplePlan2.addMissionInfluenceGoal(60)
 samplePlan2.addBountyGoal(16000000)
 samplePlan2.addCartographyGoal(8000000)
 samplePlan2.addTradeProfitGoal(16000000)
+samplePlan2.addMurderGoal(32)
+samplePlan2.setHookUrl("https://discordapp.com/api/webhooks/785361212367831041/dPSrZRbPKpPDG9QIEOf7klmw8S56rS-AiWcj8-3pB1FsiKOFLQv7j9gJDy5XK3eP34Jz")
 
 samplePlan3: DailyPlan = DailyPlan("LAWD 26", "Minutemen", "Sirius Corporation")
 samplePlan3.addMissionInfluenceGoal(90)
