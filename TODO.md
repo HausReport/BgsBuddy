@@ -1,9 +1,7 @@
 Short Term
 ==========
+1. Add reporters to loaded/downloaded dailyplans
 1. Dictionary for missions, to support failed missions
-1. Save sample DailyPlan as JSON(L)
-1. Save sample DailyPlans as JSON(L)
-1. Read plans from (remote) JSON(L) file
 1. Save updates to addresses.jsonl file
 1. What makes sense for EDMC GUI?
 1. Figure out what to do with faction states
@@ -31,6 +29,9 @@ Long Term
 
 v 0.2
 =====
+1. Save sample DailyPlan as JSON(L)
+1. Save sample DailyPlans as JSON(L)
+1. Read plans from (remote) JSON(L) file
 
 v 0.1
 ====
