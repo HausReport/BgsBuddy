@@ -43,7 +43,7 @@ link = "http://www.somesite.com/details.pl?urn=2344"
 
 def downloadDailyPlans(fName="DailyPlans.json"):
     url = "https://raw.githubusercontent.com/HausReport/BgsBuddy/master/"+fName
-    f = requests.get(link)
+    f = requests.get(url)
     print("DOWNLOADED JSON")
     print("===========================================")
     data = f.text

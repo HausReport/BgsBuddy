@@ -82,8 +82,8 @@ class TestDailyPlans(TestCase):
         assert dp == self.dailyPlans
 
     def test_download_plan(self):
-        dp = IoHelpers.loadDailyPlans("TestDailyPlans.json")
-        print("AFTER LOADING")
+        dp = IoHelpers.downloadDailyPlans("TestDailyPlans.json")
+        print("AFTER DOWNLOADING")
         print("==================================================")
         print(dp.reprJSON())
         assert dp == self.dailyPlans
