@@ -1,0 +1,26 @@
+[
+{
+    "systemName": "LHS 2477",
+    "heroFaction": "Federal Reclamation Co",
+    "targetFaction": "Hodack Prison Colony",
+    "hookUrls": [
+        "https://discordapp.com/api/webhooks/785361212367831041/dPSrZRbPKpPDG9QIEOf7klmw8S56rS-AiWcj8-3pB1FsiKOFLQv7j9gJDy5XK3eP34Jz"
+    ],
+    "missionInfluenceGoal": 60,
+    "bountyGoal": 16000000,
+    "cartographyGoal": 8000000,
+    "tradeProfitGoal": 16000000
+},
+{
+    "systemName": "HR 5975",
+    "heroFaction": "Beyond Infinity Corporation",
+    "targetFaction": "Wreaken Construction",
+    "hookUrls": [
+        "https://discordapp.com/api/webhooks/785228043128012820/uFmUix9PqWhh1cAoYYx1Hsh43VVmGPwCnNQlq5is1vBhqKUTeC2h0-VgDXfmQttuq9UX"
+    ],
+    "missionInfluenceGoal": 60,
+    "bountyGoal": 16000000,
+    "cartographyGoal": 8000000,
+    "tradeProfitGoal": 16000000
+}
+]
