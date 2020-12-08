@@ -47,9 +47,14 @@ class TestDailyPlans(TestCase):
 
     def test_add_plan(self):
         dv = self.dailyPlans.reprJSON()
+        print("BEFORE SAVING")
+        print("==================================================")
         print(dv)
-        IoHelpers.saveDailyPlans("DailyPlans.json", self.dailyPlans)
+        IoHelpers.saveDailyPlans("TestDailyPlans.json", self.dailyPlans)
 
     def test_read_plan(self):
-        dp = IoHelpers.loadDailyPlans("DailyPlans.json")
-        pprint(dp)
+        dp = IoHelpers.loadDailyPlans("TestDailyPlans.json")
+        print("AFTER LOADING")
+        print("==================================================")
+        print(dp.reprJSON())
+        assert dp == self.dailyPlans

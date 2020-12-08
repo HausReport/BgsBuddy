@@ -380,5 +380,15 @@ class DailyPlan:
             ret.addTradeLossGoal(aDict.get("tradeLossGoal"))
         if "murderGoal" in aDict:
             ret.addMurderGoal(aDict.get("murderGoal"))
+        if "hookUrls" in aDict:
+            strs: List[str] = aDict.get("hookUrls")
+            for it in strs:
+                ret.addHookUrl(it)
 
         return ret
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.__dict__ == other.__dict__
+        return False
+

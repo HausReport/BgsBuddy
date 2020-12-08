@@ -1,6 +1,5 @@
 Short Term
 ==========
-1. Move WebHook from DiscoReporter to DailyPlan, keep it as a list (Maybe done?  Working?)
 1. Dictionary for missions, to support failed missions
 1. Save sample DailyPlan as JSON(L)
 1. Save sample DailyPlans as JSON(L)
@@ -13,6 +12,7 @@ Short Term
 1. Handle mission fails in DailyPlan
 1. Make download available?
 1. Check that 1st, 2nd DailyPlan work... is the default hook wrong?
+1. Research CZ win in journal files, massacre mission completion
 
 Mid Term
 ========
@@ -29,8 +29,12 @@ Long Term
 1. Accumulate results somewhere
 2. Graphs of progress, contributions, etc...
 
-Done
+v 0.2
+=====
+
+v 0.1
 ====
+1. ~~Move WebHook from DiscoReporter to DailyPlan, keep it as a list (Maybe done?  Working?)~~
 1. ~~Add CMDR name to DiscordReporter output~~
 1. ~~Empty targets dict sometime that makes sense... maybe on docking/jump~~
 1. ~~Trade - check commodity~~

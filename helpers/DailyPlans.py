@@ -13,13 +13,16 @@ class DailyPlans:
 
         self.plans: List[DailyPlan] = []
         self.reporters: List[Reporter] = []
-        #self.reporters: List[Reporter] = .append(reporter)
+        # self.reporters: List[Reporter] = .append(reporter)
 
     def addPlan(self, plan: DailyPlan):
         self.plans.append(plan)
 
     def addReporter(self, reporter: Reporter):
         self.reporters.append(reporter)
+
+    def size(self):
+        return len(self.plans)
 
     #
     # Updated by DailyPlans as ship moves
@@ -110,3 +113,13 @@ class DailyPlans:
         #     else:
         #         d[a] = v
         # return json.dumps(d, indent=4)
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            if other.size() != self.size():
+                return False
+            for plan in self.plans:
+                if plan not in other.plans:
+                    return False
+            return True
+        return False
