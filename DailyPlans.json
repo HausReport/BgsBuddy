@@ -1,26 +1,55 @@
 [
 {
-    "systemName": "LHS 2477",
-    "heroFaction": "Federal Reclamation Co",
+    "systemName": "Kipsigines",
+    "heroFaction": "Alliance of CD-33 8748",
     "targetFaction": "Hodack Prison Colony",
     "hookUrls": [
-        "https://discordapp.com/api/webhooks/785361212367831041/dPSrZRbPKpPDG9QIEOf7klmw8S56rS-AiWcj8-3pB1FsiKOFLQv7j9gJDy5XK3eP34Jz"
+        "https://discordapp.com/api/webhooks/785936080091873310/h43X5LxjVA6a0RQjImXKTofRs7vdu_phRNYihoblsSquVZeGJslbcou0L-zYphrpANR-"
     ],
     "missionInfluenceGoal": 60,
     "bountyGoal": 16000000,
     "cartographyGoal": 8000000,
-    "tradeProfitGoal": 16000000
+    "tradeProfitGoal": 8000000,
+    "murderGoal": 6
 },
 {
     "systemName": "HR 5975",
     "heroFaction": "Beyond Infinity Corporation",
     "targetFaction": "Wreaken Construction",
     "hookUrls": [
-        "https://discordapp.com/api/webhooks/785228043128012820/uFmUix9PqWhh1cAoYYx1Hsh43VVmGPwCnNQlq5is1vBhqKUTeC2h0-VgDXfmQttuq9UX"
+        "https://discordapp.com/api/webhooks/785361212367831041/dPSrZRbPKpPDG9QIEOf7klmw8S56rS-AiWcj8-3pB1FsiKOFLQv7j9gJDy5XK3eP34Jz"
     ],
     "missionInfluenceGoal": 60,
     "bountyGoal": 16000000,
     "cartographyGoal": 8000000,
-    "tradeProfitGoal": 16000000
+    "tradeProfitGoal": 16000000,
+    "murderGoal": 12
+},
+{
+    "systemName": "LAWD 26",
+    "heroFaction": "Minutemen",
+    "targetFaction": "Sirius Corporation",
+    "hookUrls": [
+        "https://discordapp.com/api/webhooks/785228043128012820/uFmUix9PqWhh1cAoYYx1Hsh43VVmGPwCnNQlq5is1vBhqKUTeC2h0-VgDXfmQttuq9UX"
+    ],
+    "missionInfluenceGoal": 90,
+    "bountyGoal": 16000000,
+    "cartographyGoal": 8000000,
+    "tradeProfitGoal": 0,
+    "tradeLossGoal": 16000000,
+    "murderGoal": 32
+},
+{
+    "systemName": "Solati",
+    "heroFaction": "Alliance of CD-33 8748",
+    "targetFaction": "Hodack Prison Colony",
+    "hookUrls": [
+        "https://discordapp.com/api/webhooks/785936584716976158/3qQG9ovZB4_PPx7np9tIHXZXeBIq0OcvXFu0vMsD7RKGixYs1_xd-fHn9fLrVZiiOq9R"
+    ],
+    "missionInfluenceGoal": 60,
+    "bountyGoal": 16000000,
+    "cartographyGoal": 8000000,
+    "tradeProfitGoal": 16000000,
+    "murderGoal": 6
 }
 ]

@@ -150,6 +150,7 @@ dailyPlans.addReporter(logReporter)
 dailyPlans.addPlan(samplePlan)
 dailyPlans.addPlan(samplePlan2)
 dailyPlans.addPlan(samplePlan3)
+dailyPlans.addPlan(samplePlan4)
 disco = DiscordReporter(logger)
 dailyPlans.addReporter(disco)
 
