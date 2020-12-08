@@ -1,16 +1,12 @@
 Short Term
 ==========
-1. Add reporters to loaded/downloaded dailyplans
 1. Dictionary for missions, to support failed missions
-1. Save updates to addresses.jsonl file
 1. What makes sense for EDMC GUI?
 1. Figure out what to do with faction states
 1. Add Smuggling lever
 1. Trade - check demand
 1. Handle mission fails in DailyPlan
-1. Make download available?
-1. Check that 1st, 2nd DailyPlan work... is the default hook wrong?
-1. Research CZ win in journal files, massacre mission completion
+1. Research: CZ win in journal files, massacre mission completion
 
 Mid Term
 ========
@@ -27,11 +23,20 @@ Long Term
 1. Accumulate results somewhere
 2. Graphs of progress, contributions, etc...
 
+v 0.3
+=====
+1. ~~Save updates to addresses.jsonl file~~
+2. ~~Notify user when new version available.  Remove "Count Me" button.~~
+
+
 v 0.2
 =====
-1. Save sample DailyPlan as JSON(L)
-1. Save sample DailyPlans as JSON(L)
-1. Read plans from (remote) JSON(L) file
+1. ~~Make download available?~~
+1. ~~Save sample DailyPlan as JSON(L)~~
+1. ~~Save sample DailyPlans as JSON(L)~~
+1. ~~Read plans from (remote) JSON(L) file~~
+1. ~~Add reporters to loaded/downloaded dailyplans~~
+1. ~~Check that 1st, 2nd DailyPlan work... is the default hook wrong?~~
 
 v 0.1
 ====

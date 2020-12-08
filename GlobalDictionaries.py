@@ -81,6 +81,7 @@ def add_system_and_address(sys: str, add: str):
     global_system_name_to_address[sys] = add
     sz = len(global_system_address_to_name)
     logger.info(f"Adding sys={sys}, add={add}, nitems={sz}")
+    saveLocalDictionary(global_system_name_to_address,"addresses.jsonl")
     #print(json.dumps(global_system_address_to_name))
 
 

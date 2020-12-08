@@ -10,8 +10,12 @@ It adds a single button to the EDMC interface that displays the number of times 
 
 import logging
 import os
+import sys
 import tkinter as tk
+import webbrowser
 from typing import Optional
+
+import requests
 
 import IoHelpers
 
@@ -25,7 +29,7 @@ import GlobalDictionaries
 from helpers.DiscordReporter import DiscordReporter
 
 GlobalDictionaries.init_logger()
-#GlobalDictionaries.load_addresses()
+# GlobalDictionaries.load_addresses()
 
 from helpers.DailyPlan import DailyPlan
 from helpers.DailyPlans import DailyPlans
@@ -90,74 +94,42 @@ class BgsBuddy:
         :param cmdr: The current ED Commander
         :param is_beta: Whether or not EDMC is currently marked as in beta mode
         """
-        config.set('click_counter_count', self.click_count.get())
+        #config.set('click_counter_count', self.click_count.get())
+        pass
 
     def setup_main_ui(self, parent: tk.Frame) -> tk.Frame:
-        """
-        Create our entry on the main EDMC UI.
-        This is called by plugin_app below.
-        :param parent: EDMC main window Tk
-        :return: Our frame
-        """
-        current_row = 0
-        frame = tk.Frame(parent)
-        button = tk.Button(
-            frame,
-            text="Count me",
-            command=lambda: self.click_count.set(str(int(self.click_count.get()) + 1))
-        )
-        button.grid(row=current_row)
-        current_row += 1
-        nb.Label(frame, text="Count:").grid(row=current_row, sticky=tk.W)
-        nb.Label(frame, textvariable=self.click_count).grid(row=current_row, column=1)
-        return frame
+        # """
+        # Create our entry on the main EDMC UI.
+        # This is called by plugin_app below.
+        # :param parent: EDMC main window Tk
+        # :return: Our frame
+        # """
+        # current_row = 0
+        # frame = tk.Frame(parent)
+        # button = tk.Button(
+        #     frame,
+        #     text="Count me",
+        #     command=lambda: self.click_count.set(str(int(self.click_count.get()) + 1))
+        # )
+        # button.grid(row=current_row)
+        # current_row += 1
+        # nb.Label(frame, text="Count:").grid(row=current_row, sticky=tk.W)
+        # nb.Label(frame, textvariable=self.click_count).grid(row=current_row, column=1)
+        # return frame
+        pass
+
+cc = BgsBuddy()
 
 cmdrNameSet = False
-cc = BgsBuddy()
-dp = IoHelpers.downloadDailyPlans("TestDailyPlans.json")
-# samplePlan: DailyPlan = DailyPlan("Kipsigines", "Alliance of CD-33 8748", "Hodack Prison Colony")
-# samplePlan.addMissionInfluenceGoal(60)
-# samplePlan.addBountyGoal(16000000)
-# samplePlan.addCartographyGoal(8000000)
-# samplePlan.addTradeProfitGoal(8000000)
-# samplePlan.addMurderGoal(6)
-# samplePlan.addHookUrl("https://discordapp.com/api/webhooks/785936080091873310/h43X5LxjVA6a0RQjImXKTofRs7vdu_phRNYihoblsSquVZeGJslbcou0L-zYphrpANR-")
-#
-# samplePlan2: DailyPlan = DailyPlan("HR 5975", "Beyond Infinity Corporation", "Wreaken Construction")
-# samplePlan2.addMissionInfluenceGoal(60)
-# samplePlan2.addBountyGoal(16000000)
-# samplePlan2.addCartographyGoal(8000000)
-# samplePlan2.addTradeProfitGoal(16000000)
-# samplePlan2.addMurderGoal(12)
-# samplePlan2.addHookUrl("https://discordapp.com/api/webhooks/785361212367831041/dPSrZRbPKpPDG9QIEOf7klmw8S56rS-AiWcj8-3pB1FsiKOFLQv7j9gJDy5XK3eP34Jz")
-#
-# samplePlan3: DailyPlan = DailyPlan("LAWD 26", "Minutemen", "Sirius Corporation")
-# samplePlan3.addMissionInfluenceGoal(90)
-# samplePlan3.addBountyGoal(16000000)
-# samplePlan3.addCartographyGoal(8000000)
-# samplePlan3.addTradeProfitGoal(0)
-# samplePlan3.addTradeLossGoal(16000000)
-# samplePlan3.addMurderGoal(32)
-# samplePlan3.addHookUrl("https://discordapp.com/api/webhooks/785228043128012820/uFmUix9PqWhh1cAoYYx1Hsh43VVmGPwCnNQlq5is1vBhqKUTeC2h0-VgDXfmQttuq9UX")
-#
-# samplePlan4: DailyPlan = DailyPlan("Solati", "Alliance of CD-33 8748", "Hodack Prison Colony")
-# samplePlan4.addMissionInfluenceGoal(60)
-# samplePlan4.addBountyGoal(16000000)
-# samplePlan4.addCartographyGoal(8000000)
-# samplePlan4.addTradeProfitGoal(16000000)
-# samplePlan4.addMurderGoal(6)
-# samplePlan4.addHookUrl("https://discordapp.com/api/webhooks/785936584716976158/3qQG9ovZB4_PPx7np9tIHXZXeBIq0OcvXFu0vMsD7RKGixYs1_xd-fHn9fLrVZiiOq9R")
+dp = IoHelpers.downloadDailyPlans("DailyPlans.json")
 
-dailyPlans: DailyPlans = dp #DailyPlans()
+dailyPlans: DailyPlans = dp
 dailyPlans.addReporter(logReporter)
-# dailyPlans.addPlan(samplePlan)
-# dailyPlans.addPlan(samplePlan2)
-# dailyPlans.addPlan(samplePlan3)
-# dailyPlans.addPlan(samplePlan4)
 disco = DiscordReporter(logger)
 dailyPlans.addReporter(disco)
 
-print( dailyPlans.reprJSON())
+print(dailyPlans.reprJSON())
+
 #
 # Direct EDMC callbacks to class
 #
@@ -180,9 +152,42 @@ def prefs_changed(cmdr: str, is_beta: bool) -> None:
     return cc.on_preferences_closed(cmdr, is_beta)
 
 
-def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
-    return cc.setup_main_ui(parent)
+this = sys.modules[__name__]  # For holding module globals
+this.VersionNo = "0.2"
+response = requests.get('https://api.github.com/repos/tezw21/BGS-Tally/releases/latest')  # check latest version
+latest = response.json()
+this.GitVersion = latest['tag_name']
 
+def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
+    # return cc.setup_main_ui(parent)
+    """
+    Create a frame for the EDMC main window
+    """
+    this.frame = tk.Frame(parent)
+
+    Title = tk.Label(this.frame, text="BgsBuddy v" + this.VersionNo)
+    Title.grid(row=0, column=0, sticky=tk.W)
+    if version_tuple(this.GitVersion) > version_tuple(this.VersionNo):
+        title2 = tk.Label(this.frame, text="New version available", fg="blue", cursor="hand2")
+        title2.grid(row=0, column=1, sticky=tk.W, )
+        title2.bind("<Button-1>", lambda e: webbrowser.open_new("https://github.com/HausReport/BgsBuddy/releases"))
+
+    # tk.Button(this.frame, text='Data Today', command=display_data).grid(row=1, column=0, padx=3)
+    # tk.Button(this.frame, text='Data Yesterday', command=display_yesterdaydata).grid(row=1, column=1, padx=3)
+    # tk.Label(this.frame, text="Status:").grid(row=2, column=0, sticky=tk.W)
+    # tk.Label(this.frame, text="Last Tick:").grid(row=3, column=0, sticky=tk.W)
+    # this.StatusLabel = tk.Label(this.frame, text=this.Status.get())
+    # this.StatusLabel.grid(row=2, column=1, sticky=tk.W)
+    # this.TimeLabel = tk.Label(this.frame, text=tick_format(this.TickTime)).grid(row=3, column=1, sticky=tk.W)
+
+    return this.frame
+
+def version_tuple(version):
+    try:
+        ret = tuple(map(int, version.split(".")))
+    except:
+        ret = (0,)
+    return ret
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     event = entry['event']
@@ -231,12 +236,12 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             pilotFaction = entry['Faction']
             logger.info(f"Targeted: {pilotName} from {pilotFaction}")
             GlobalDictionaries.add_target_faction(pilotName, pilotFaction)
-    elif event == 'CommitCrime' and entry['CrimeType']=='murder':  # Clean Murder
+    elif event == 'CommitCrime' and entry['CrimeType'] == 'murder':  # Clean Murder
         dailyPlans.checkMurder(entry)
     elif event == 'FSDJump' or event == 'CarrierJump':  # get factions at jump
-    #
-    # Update system stuff
-    #
+        #
+        # Update system stuff
+        #
         systemName = entry['StarSystem']
         systemAddress = str(entry['SystemAddress'])
         dailyPlans.setCurrentSystem(systemName)
