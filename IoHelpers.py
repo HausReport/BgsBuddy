@@ -1,6 +1,7 @@
 import inspect
 import os
 import json
+import requests
 
 from helpers.DailyPlan import DailyPlan
 from helpers.DailyPlans import DailyPlans
@@ -36,3 +37,23 @@ def loadDailyPlans(fName:str) -> DailyPlans:
         adp = DailyPlan.fromDict(item)
         dp.addPlan(adp)
     return dp
+
+
+link = "http://www.somesite.com/details.pl?urn=2344"
+
+def downloadDailyPlans(fName="DailyPlans.json"):
+    url = "https://raw.githubusercontent.com/HausReport/BgsBuddy/master/"+fName
+    f = requests.get(link)
+    print("DOWNLOADED JSON")
+    print("===========================================")
+    data = f.text
+    print(data)
+    # reconstructing the data as a list of dictionarues
+    js = json.loads(data)
+
+    dp = DailyPlans()
+    for item in js:
+        adp = DailyPlan.fromDict(item)
+        dp.addPlan(adp)
+    return dp
+
