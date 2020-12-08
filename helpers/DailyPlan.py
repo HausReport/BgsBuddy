@@ -27,6 +27,7 @@ import logging
 from typing import List, Dict
 
 from .Status import Status
+
 # from ..GlobalDictionaries import *
 try:
     import GlobalDictionaries
@@ -47,7 +48,6 @@ DEFAULT_HOOK_URL = "https://discordapp.com/api/webhooks/784901136946561064/MyLLL
 
 
 class DailyPlan:
-
     #
     # Plan statics
     #
@@ -78,14 +78,14 @@ class DailyPlan:
         self.systemName = systemName
         self.heroFaction = heroFaction
         self.targetFaction = targetFaction
-        #import GlobalDictionaries  # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
+        # import GlobalDictionaries  # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
         self.logger = GlobalDictionaries.logger
         self.logger.info("Initialized DailyPlan")
         self.logger.debug('This message should go to the log file')
         self.logger.info('So should this')
         self.logger.warning('And this, too')
         self.logger.error('And non-ASCII stuff, too, like Øresund and Malmö')
-        self.hookUrl = DEFAULT_HOOK_URL
+        self.hookUrls: List[str] = []  # DEFAULT_HOOK_URL
 
     def currentlyInTargetSystem(self) -> bool:
         return self.isSystemName(self.currentSystem)
@@ -117,8 +117,9 @@ class DailyPlan:
                 return True
         return False
 
-    def setHookUrl(self, url: str):
-        self.hookUrl = url
+    def addHookUrl(self, url: str):
+        self.hookUrls.append(url)
+
     #
     # Updated by DailyPlans as ship moves
     #
@@ -179,43 +180,43 @@ class DailyPlan:
             for influenceEntry in influenceEntries:
                 entrySystemAddress = str(influenceEntry['SystemAddress'])
                 # from .. import GlobalDictionaries HERE
-                #import GlobalDictionaries
+                # import GlobalDictionaries
                 entrySystemName = GlobalDictionaries.get_system_by_address(entrySystemAddress)
                 self.logger.info(
                     f"SystemAddress: {entrySystemAddress}, SystemName: {entrySystemName}, curSys: {self.systemName}")
-                infStr:str = influenceEntry['Influence']
+                infStr: str = influenceEntry['Influence']
                 inf: int = len(infStr)
                 infSign: int = 1
                 if infStr.startswith("-"):
                     infSign = -1
                 inf = inf * infSign
                 if self.isSystemName(entrySystemName):  # FIXME: revisit case of two systems with same name
-                    if inf>0 :
+                    if inf > 0:
                         if self.isHeroFactionName(factionName):
                             msg = f"{self.systemName}: {factionName}: Mission Contribution: {inf} points."
                             self.logger.info(msg)
-                            ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrl))
+                            ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrls))
                         elif self.isTargetFactionName(factionName):
                             msg = f"{self.systemName}: {factionName}: Mission Contribution to **ENEMY**: {inf} points."
                             self.logger.info(msg)
-                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrl))
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrls))
                         else:
                             msg = f"{self.systemName}: {factionName}: Mission Contribution to **COMPETITOR**: {inf} points."
                             self.logger.info(msg)
-                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrl))
-                    elif inf<0:
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrls))
+                    elif inf < 0:
                         if self.isHeroFactionName(factionName):
                             msg = f"{self.systemName}: {factionName}: Negative Mission Contribution to **ALLY**: {inf} points."
                             self.logger.info(msg)
-                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrl))
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrls))
                         elif self.isTargetFactionName(factionName):
                             msg = f"{self.systemName}: {factionName}: Negative Mission Contribution to ENEMY: {inf} points."
                             self.logger.info(msg)
-                            ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrl))
+                            ret.append(Status(1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrls))
                         else:
                             msg = f"{self.systemName}: {factionName}: Negative Mission Contribution to **COMPETITOR**: {inf} points."
                             self.logger.info(msg)
-                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrl))
+                            ret.append(Status(-1, msg, CAT_MISSION_SUCCESS, inf, self.hookUrls))
 
         return ret
 
@@ -227,13 +228,13 @@ class DailyPlan:
                 bounty = z['Amount']
                 if self.isHeroFactionName(factionName):
                     msg = f"{self.systemName}: {factionName}: Bounty contribution of {bounty:,} credits."
-                    ret.append(Status(1, msg, CAT_BOUNTY, bounty, self.hookUrl))
+                    ret.append(Status(1, msg, CAT_BOUNTY, bounty, self.hookUrls))
                 elif self.isTargetFactionName(factionName):
                     msg = f"{self.systemName}: {factionName}: Bounty contribution of to **ENEMY** of {bounty:,} credits."
-                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrl))
+                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
                 else:
                     msg = f"{self.systemName}: {factionName}: Bounty contribution of to **COMPETITOR** of {bounty:,} credits."
-                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrl))
+                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
         return ret
 
     def checkCartography(self, entry: Dict) -> List[Status]:
@@ -244,13 +245,13 @@ class DailyPlan:
                 earnings: int = int(entry['TotalEarnings'])
                 if self.isHeroFactionName(factionName):
                     msg = f"{self.systemName}: {factionName}: Exploration data sold: {earnings:,} ."
-                    ret.append(Status(1, msg, CAT_CARTOGRAPHY, earnings, self.hookUrl))
+                    ret.append(Status(1, msg, CAT_CARTOGRAPHY, earnings, self.hookUrls))
                 elif self.isTargetFactionName(factionName):
                     msg = f"{self.systemName}: {factionName}: Exploration data sold to **ENEMY**: {earnings:,} ."
-                    ret.append(Status(-1, msg, CAT_CARTOGRAPHY, earnings, self.hookUrl))
+                    ret.append(Status(-1, msg, CAT_CARTOGRAPHY, earnings, self.hookUrls))
                 else:
                     msg = f"{self.systemName}: {factionName}: Exploration data sold to **COMPETITOR**: {earnings:,} ."
-                    ret.append(Status(-1, msg, CAT_CARTOGRAPHY, earnings, self.hookUrl))
+                    ret.append(Status(-1, msg, CAT_CARTOGRAPHY, earnings, self.hookUrls))
         return ret
 
     def checkTrade(self, entry: Dict) -> List[Status]:
@@ -265,23 +266,23 @@ class DailyPlan:
                 if profit > 0:
                     if self.isHeroFactionName(factionName):
                         msg = f"{self.systemName}: {factionName}: Trade For Profit: {profit:,} ({count} of {commodity})."
-                        ret.append(Status(1, msg, CAT_TRADE_PROFIT, profit, self.hookUrl))
+                        ret.append(Status(1, msg, CAT_TRADE_PROFIT, profit, self.hookUrls))
                     elif self.isTargetFactionName(factionName):
                         msg = f"{self.systemName}: {factionName}: Trade For Profit **ENEMY** : {profit:,} ({count} of {commodity})."
-                        ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit, self.hookUrl))
+                        ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit, self.hookUrls))
                     else:
                         msg = f"{self.systemName}: {factionName}: Trade For Profit **COMPETITOR** : {profit:,} ({count} of {commodity})."
-                        ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit, self.hookUrl))
+                        ret.append(Status(-1, msg, CAT_TRADE_PROFIT, profit, self.hookUrls))
                 else:
                     if self.isTargetFactionName(factionName):
                         msg = f"{self.systemName}: {factionName}: Trade For Loss: {profit:,} ({count} of {commodity})."
-                        ret.append(Status(1, msg, CAT_TRADE_LOSS, profit, self.hookUrl))
+                        ret.append(Status(1, msg, CAT_TRADE_LOSS, profit, self.hookUrls))
                     elif self.isHeroFactionName(factionName):
                         msg = f"{self.systemName}: {factionName}: Trade For Loss **ALLY**: {profit:,} ({count} of {commodity})."
-                        ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit, self.hookUrl))
+                        ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit, self.hookUrls))
                     else:
                         msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} ({count} of {commodity})."
-                        ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit, self.hookUrl))
+                        ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit, self.hookUrls))
 
         return ret
 
@@ -292,19 +293,19 @@ class DailyPlan:
         # If attacks enemy faction in goal system
         #
         if a == 0:
-            ret.append(Status(1, "Failed Mission against Enemy Faction", CAT_MISSION_FAIL, 1, self.hookUrl))
+            ret.append(Status(1, "Failed Mission against Enemy Faction", CAT_MISSION_FAIL, 1, self.hookUrls))
 
         #
         # If benefits hero faction in goal system
         #
         if a == 0:
-            ret.append(Status(-1, "Failed Mission against Hero Faction", CAT_MISSION_FAIL, 1, self.hookUrl))
+            ret.append(Status(-1, "Failed Mission against Hero Faction", CAT_MISSION_FAIL, 1, self.hookUrls))
 
         #
         # If benefits competitor faction in goal system
         #
         if a == 0:
-            ret.append(Status(-1, "Failed Mission against Neutral Faction", CAT_MISSION_FAIL, 1, self.hookUrl))
+            ret.append(Status(-1, "Failed Mission against Neutral Faction", CAT_MISSION_FAIL, 1, self.hookUrls))
 
         return ret
 
@@ -320,17 +321,64 @@ class DailyPlan:
             if pilotFaction is None:
                 self.logger.error(f"Unknown pilot faction in murder check")
             elif self.isTargetFactionName(pilotFaction):
-                ret.append(Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy", CAT_MURDER, 1, self.hookUrl))
+                ret.append(
+                    Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy", CAT_MURDER, 1, self.hookUrls))
             elif self.isHeroFactionName(pilotFaction):
-                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **ALLY**", CAT_MURDER, 1, self.hookUrl))
+                ret.append(
+                    Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **ALLY**", CAT_MURDER, 1, self.hookUrls))
             else:
-                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER**", CAT_MURDER, 1, self.hookUrl))
+                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER**", CAT_MURDER, 1,
+                                  self.hookUrls))
 
         return ret
 
     #
     # Marshalling/unmarshalling of plans as JSON(L)
     #
-    def to_dict(self):
-        default = lambda o: f"<<non-serializable: {type(o).__qualname__}>>"
-        return json.dumps(self.__dict__, indent=4, default=default)
+    def reprJSON(self):
+        d = dict()
+        for a, v in self.__dict__.items():
+            if a == "logger":
+                continue
+            elif (hasattr(v, "reprJSON")):
+                d[a] = v.reprJSON()
+            else:
+                d[a] = v
+        return json.dumps(d, indent=4)
+    #    return d
+    # default = lambda o: f"<<non-serializable: {type(o).__qualname__}>>"
+
+    @staticmethod
+    def fromDict(aDict: Dict[str, str]):
+        systemName = None
+        heroFaction=None
+        targetFaction=None
+
+        if "systemName" in aDict:
+            systemName = aDict.get("systemName")
+        if "heroFaction" in aDict:
+            heroFaction = aDict.get("heroFaction")
+        if "systemName" in aDict:
+            targetFaction = aDict.get("targetFaction")
+
+        if systemName is None or heroFaction is None or targetFaction is None:
+            return None
+
+        ret: DailyPlan = DailyPlan(systemName,heroFaction,targetFaction)
+
+        if "missionInfluenceGoal" in aDict:
+            ret.addMissionInfluenceGoal(aDict.get("missionInfluenceGoal"))
+        if "bountyGoal" in aDict:
+            ret.addBountyGoal(aDict.get("bountyGoal"))
+        if "cartographyGoal" in aDict:
+            ret.addCartographyGoal(aDict.get("cartographyGoal"))
+        if "tradeProfitGoal" in aDict:
+            ret.addTradeProfitGoal(aDict.get("tradeProfitGoal"))
+        if "missionFailGoal" in aDict:
+            ret.addMissionFailGoal(aDict.get("missionFailGoal"))
+        if "tradeLossGoal" in aDict:
+            ret.addTradeLossGoal(aDict.get("tradeLossGoal"))
+        if "murderGoal" in aDict:
+            ret.addMurderGoal(aDict.get("murderGoal"))
+
+        return ret

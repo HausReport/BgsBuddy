@@ -9,10 +9,11 @@ from .Reporter import Reporter
 
 class DailyPlans:
 
-    def __init__(self, reporter: LogReporter):
+    def __init__(self):
+
         self.plans: List[DailyPlan] = []
         self.reporters: List[Reporter] = []
-        self.reporters.append(reporter)
+        #self.reporters: List[Reporter] = .append(reporter)
 
     def addPlan(self, plan: DailyPlan):
         self.plans.append(plan)
@@ -84,6 +85,28 @@ class DailyPlans:
     #
     # Marshalling/unmarshalling of plans as JSON(L)
     #
-    def to_dict(self):
-        default = lambda o: f"<<non-serializable: {type(o).__qualname__}>>"
-        return json.dumps(self.__dict__, indent=4, default=default)
+    def reprJSON(self):
+        ret = "[\n"
+        first: bool = True
+        for dp in self.plans:
+            if not first:
+                ret = ret + ",\n"
+            first = False
+            ret = ret + dp.reprJSON()
+        ret = ret + "\n]"
+        return ret
+
+        #             d['plans'].append(dp.reprJSON())
+        # d = dict()
+        # d['plans']: List[DailyPlan] = []
+        # for a, v in self.__dict__.items():
+        #     if a == "plans":
+        #         for dp in self.plans:
+        #             d['plans'].append(dp.reprJSON())
+        #     elif a == "reporters":
+        #         continue
+        #     elif (hasattr(v, "reprJSON")):
+        #         d[a] = v.reprJSON()
+        #     else:
+        #         d[a] = v
+        # return json.dumps(d, indent=4)

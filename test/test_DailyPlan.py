@@ -5,8 +5,8 @@
 from pprint import pprint
 from unittest import TestCase
 
-from craid.bgsBuddy import GlobalDictionaries
-from craid.bgsBuddy.helpers.DailyPlan import DailyPlan
+import GlobalDictionaries
+from helpers.DailyPlan import DailyPlan
 
 
 class TestDailyPlan(TestCase):
@@ -17,11 +17,15 @@ class TestDailyPlan(TestCase):
         self.samplePlan.addBountyGoal(16000000)
         self.samplePlan.addCartographyGoal(8000000)
         self.samplePlan.addTradeProfitGoal(16000000)
-
+        self.samplePlan.addHookUrl(
+        "https://discordapp.com/api/webhooks/785361212367831041/dPSrZRbPKpPDG9QIEOf7klmw8S56rS-AiWcj8-3pB1FsiKOFLQv7j9gJDy5XK3eP34Jz")
+        self.samplePlan.addHookUrl(
+        "https://discordapp.com/api/webhooks/785228043128012820/uFmUix9PqWhh1cAoYYx1Hsh43VVmGPwCnNQlq5is1vBhqKUTeC2h0-VgDXfmQttuq9UX")
 
     def tearDown(self):
         pass
 
     def test_to_dict(self):
-        dv = self.samplePlan.to_dict()
-        pprint(dv)
+        dv = self.samplePlan.reprJSON()
+        print("--->" + dv + "<----")
+        #pprint(dv)
