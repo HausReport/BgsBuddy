@@ -53,7 +53,7 @@
 # Infrastructure Failure?
 # Other states?
 import logging
-from typing import List, Dict
+from typing import List, Dict, Set
 
 from .Status import Status
 
@@ -74,6 +74,72 @@ CAT_MISSION_FAIL = "MissionFail"
 CAT_MURDER = "Murder"
 
 DEFAULT_HOOK_URL = "https://discordapp.com/api/webhooks/784901136946561064/MyLLLTWbJnZWBAgGJlhDxe2rdYOE41qoc03hcNue_rzfWY8HGXayqyLE6VAeO0-72fW1"
+
+#
+# For new states
+#
+# Famine
+def isMedicine(name: str) -> bool:
+    medicines: Set[str] = {"advancedmedicines", "basicmedicines", "fish", "foodcartridges", "fruitandvegetables",
+                           "grain", "syntheticmeat"}
+    return name in medicines
+
+
+def isFood(name: str) -> bool:
+    foods: Set[str] = {"algae", "animalmeat", "fish", "foodcartridges", "fruitandvegetables", "grain", "syntheticmeat"}
+    return name in foods
+
+def isMachinery(name: str) -> bool:
+    machinery: Set[str] = {
+        "articulationmotors", "atmosphericprocessors", "buildingfabricators", "cropharvesters", \
+        "emergencypowercells", "energygridassembly", "exhaustmanifold", "geologicalequipment", "hnshockmount", \
+        "magneticemittercoil", "marineequipment", "microbialfurnaces", "mineralextractors", "modularterminals", \
+        "powerconverter", "powergenerators", "powertransferbus", "radiationbaffle", "reinforcedmountingplate", \
+        "skimmercomponents", "thermalcoolingunits", "waterpurifiers"}
+    return name in machinery
+
+
+def isWeapon(name: str) -> bool:
+    weapons: Set[str] = { "battleweapons", "landmines", "nonlethalweapons", "personalWeapons", "reactivearmour" }
+    return name in weapons
+
+# Outbreak - medicine category
+def isOutbreakCommodity(name: str) -> bool:
+    return isMedicine(name)
+
+# Blight - "agronomictreatment"
+def isBlightCommodity(name: str) -> bool:
+    return name == "agronomictreatment"
+
+# Drought - "water"
+def isDraughtCommodity(name: str) -> bool:
+    return name == "water"
+
+# Infrastructure Failure - food, machinery, medicine
+def isInfrastructureFailureCommodity(name: str) -> bool:
+    if isMedicine(name):
+        return True
+    if isFood(name):
+        return True
+    if isMachinery(name):
+        return True
+    return False
+
+# Terrorism - sell weapons + combat
+def isTerrorismCommodity(name: str) -> bool:
+    if isWeapon(name):
+        return True
+
+# Natural Disaster - food, medicine
+def isNaturalDisasterCommodity(name: str) -> bool:
+    if isMedicine(name):
+        return True
+    if isFood(name):
+        return True
+    return False
+
+# (Pirate Attack)
+# - Different logic - just boost bounty hunting
 
 
 class DailyPlan:
@@ -190,6 +256,15 @@ class DailyPlan:
 
     def addMurderGoal(self, murd: int = 12):
         self.murderGoal = murd
+
+    #
+    # Doesn't have JSON support yet
+    #
+    def addFamineGoal(self, foodOrder: int = 0):
+        self.foodOrder = foodOrder
+
+    def addDraughtGoal(self, waterOrder: int = 0):
+        self.waterOrder = waterOrder
 
     #
     # Lever checks
@@ -374,14 +449,15 @@ class DailyPlan:
             else:
                 d[a] = v
         return json.dumps(d, indent=4)
+
     #    return d
     # default = lambda o: f"<<non-serializable: {type(o).__qualname__}>>"
 
     @staticmethod
     def fromDict(aDict: Dict[str, str]):
         systemName = None
-        heroFaction=None
-        targetFaction=None
+        heroFaction = None
+        targetFaction = None
 
         if "systemName" in aDict:
             systemName = aDict.get("systemName")
@@ -393,7 +469,7 @@ class DailyPlan:
         if systemName is None or heroFaction is None or targetFaction is None:
             return None
 
-        ret: DailyPlan = DailyPlan(systemName,heroFaction,targetFaction)
+        ret: DailyPlan = DailyPlan(systemName, heroFaction, targetFaction)
 
         if "missionInfluenceGoal" in aDict:
             ret.addMissionInfluenceGoal(aDict.get("missionInfluenceGoal"))
@@ -420,4 +496,3 @@ class DailyPlan:
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
-

@@ -1,8 +1,3 @@
-"""
-Example EDMC plugin.
-It adds a single button to the EDMC interface that displays the number of times it has been clicked.
-"""
-
 #   Copyright (c) 2020 Club Raiders Project
 #   https://github.com/HausReport/ClubRaiders
 #
@@ -183,6 +178,7 @@ response = requests.get('https://api.github.com/repos/tezw21/BGS-Tally/releases/
 latest = response.json()
 this.GitVersion = latest['tag_name']
 
+logger.info(f"Current version: >{this.VersionNo}<, Latest version: >{this.GitVersion}<")
 def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
     # return cc.setup_main_ui(parent)
     """

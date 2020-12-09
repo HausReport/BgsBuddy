@@ -41,16 +41,6 @@ for k in data.keys():
     global_system_name_to_address[key] = val
     global_system_address_to_name[val] = key
 
-def saveLocalDictionary(dictionary: Dict, fName: str):
-    cwd = getDataFilePath(fName)
-    with open(cwd, 'w') as fp:
-        json.dump(dictionary, fp)
-
-#crap: Dict[str,str] = {}
-#for i in range(1,100):
-#crap[str(i)] = str(i)
-#saveLocalDictionary(crap, "crap.jsonl")
-
 # A Logger is used per 'found' plugin to make it easy to include the plugin's
 # folder name in the logging output format.
 # NB: plugin_name here *must* be the plugin's folder name as per the preceding
@@ -74,15 +64,24 @@ def init_logger():
         logger_channel.setFormatter(logger_formatter)
         logger.addHandler(logger_channel)
 
+def saveLocalDictionary(dictionary: Dict, fName: str):
+    global logger
+    cwd = getDataFilePath(fName)
+    with open(cwd, 'w') as fp:
+        json.dump(dictionary, fp)
+    logger.info(f"Saved dict to >{cwd}<")
+
 def add_system_and_address(sys: str, add: str):
     global global_system_address_to_name
     global global_system_name_to_address
-    global_system_address_to_name[add] = sys
-    global_system_name_to_address[sys] = add
-    sz = len(global_system_address_to_name)
-    logger.info(f"Adding sys={sys}, add={add}, nitems={sz}")
-    saveLocalDictionary(global_system_name_to_address,"addresses.jsonl")
-    #print(json.dumps(global_system_address_to_name))
+
+    if sys not in global_system_name_to_address:
+        global_system_address_to_name[add] = sys
+        global_system_name_to_address[sys] = add
+        sz = len(global_system_address_to_name)
+        logger.info(f"Adding sys={sys}, add={add}, nitems={sz} and saving addresses.jsonl")
+        saveLocalDictionary(global_system_name_to_address,"addresses.jsonl")
+        #print(json.dumps(global_system_address_to_name))
 
 
 def get_system_by_address(add: str) -> str:

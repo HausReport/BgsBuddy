@@ -29,7 +29,7 @@ v 0.3
 2. ~~Notify user when new version available.  Remove "Count Me" button.~~
 
 
-v 0.2
+v 0.2aaa
 =====
 1. ~~Make download available?~~
 1. ~~Save sample DailyPlan as JSON(L)~~
