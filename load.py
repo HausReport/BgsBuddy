@@ -57,9 +57,11 @@ from helpers.LogReporter import LogReporter
 
 logger = GlobalDictionaries.logger
 logReporter: LogReporter = LogReporter(logger)
-logger.info("Test log msg")
-logging.info("This is a second log msg")
+#logger.info("Test log msg")
+#logging.info("This is a second log msg")
 
+this = sys.modules[__name__]  # For holding module globals
+this.VersionNo = "0.2"
 
 class BgsBuddy:
     """
@@ -172,8 +174,6 @@ def prefs_changed(cmdr: str, is_beta: bool) -> None:
     return cc.on_preferences_closed(cmdr, is_beta)
 
 
-this = sys.modules[__name__]  # For holding module globals
-this.VersionNo = "0.2"
 response = requests.get('https://api.github.com/repos/HausReport/BgsBuddy/releases/latest')  # check latest version
 latest = response.json()
 this.GitVersion = latest['tag_name']
