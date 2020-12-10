@@ -50,6 +50,13 @@
     "bountyGoal": 16000000,
     "cartographyGoal": 8000000,
     "tradeProfitGoal": 16000000,
-    "murderGoal": 6
+    "murderGoal": 6,
+    "blightCommodities": 1,
+    "outbreakCommodities": 2,
+    "terrorismCommodities": 3,
+    "naturalDisasterCommodities": 4,
+    "famineCommodities": 5,
+    "draughtCommodities": 6,
+    "infrastructureCommodities": 7
 }
 ]

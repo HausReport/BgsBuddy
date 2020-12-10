@@ -73,6 +73,15 @@ CAT_TRADE_LOSS = "TradeLoss"
 CAT_MISSION_FAIL = "MissionFail"
 CAT_MURDER = "Murder"
 
+CAT_OUTBREAK = "OutbreakCommodities"
+CAT_BLIGHT = "BlightCommodities"
+CAT_DRAUGHT = "DraughtCommodities"
+CAT_FAMINE = "FamineCommodities"
+CAT_INFRASTRUCTURE = "InfrastructureFailureCommodities"
+CAT_TERRORISM = "TerrorismCommodities"
+CAT_NATURAL_DISASTER = "NaturalDisasterCommodities"
+#CAT_PIRATE_ATTACK = "Commodities"
+
 DEFAULT_HOOK_URL = "https://discordapp.com/api/webhooks/784901136946561064/MyLLLTWbJnZWBAgGJlhDxe2rdYOE41qoc03hcNue_rzfWY8HGXayqyLE6VAeO0-72fW1"
 
 #
@@ -169,6 +178,17 @@ class DailyPlan:
     tradeLossGoal = 0
     murderGoal = 0
 
+    #
+    # Goals for exotic states
+    #
+    outbreakCommodities = 0
+    blightCommodities = 0
+    draughtCommodities = 0
+    famineCommodities = 0
+    infrastructureFailureCommodities = 0
+    terrorismCommodities = 0
+    naturalDisasterCommodities = 0
+
     def __init__(self, systemName, heroFaction, targetFaction):
         self.systemName = systemName
         self.heroFaction = heroFaction
@@ -260,11 +280,27 @@ class DailyPlan:
     #
     # Doesn't have JSON support yet
     #
-    def addFamineGoal(self, foodOrder: int = 0):
-        self.foodOrder = foodOrder
 
-    def addDraughtGoal(self, waterOrder: int = 0):
-        self.waterOrder = waterOrder
+    def addOutbreakGoal(self, amt: int = 0):
+        self.outbreakCommodities = amt
+
+    def addBlightGoal(self, amt: int = 0):
+        self.blightCommodities = amt
+
+    def addDraughtGoal(self, amt: int = 0):
+        self.draughtCommodities = amt
+
+    def addFamineGoal(self, amt: int = 0):
+        self.famineCommodities = amt
+
+    def addInfrastructureFailureGoal(self, amt: int = 0):
+        self.infrastructureCommodities = amt
+
+    def addTerrorismGoal(self, amt: int = 0):
+        self.terrorismCommodities = amt
+
+    def addNaturalDisasterGoal(self, amt: int = 0):
+        self.naturalDisasterCommodities = amt
 
     #
     # Lever checks
@@ -334,10 +370,10 @@ class DailyPlan:
                     msg = f"{self.systemName}: {factionName}: Bounty contribution of {bounty:,} credits."
                     ret.append(Status(1, msg, CAT_BOUNTY, bounty, self.hookUrls))
                 elif self.isTargetFactionName(factionName):
-                    msg = f"{self.systemName}: {factionName}: Bounty contribution of to **ENEMY** of {bounty:,} credits."
+                    msg = f"{self.systemName}: {factionName}: Bounty contribution to **ENEMY** of {bounty:,} credits."
                     ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
                 else:
-                    msg = f"{self.systemName}: {factionName}: Bounty contribution of to **COMPETITOR** of {bounty:,} credits."
+                    msg = f"{self.systemName}: {factionName}: Bounty contribution to **COMPETITOR** of {bounty:,} credits."
                     ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
         return ret
 
@@ -387,6 +423,29 @@ class DailyPlan:
                     else:
                         msg = f"{self.systemName}: {factionName}: Trade For Loss **COMPETITOR**: {profit:,} ({count} of {commodity})."
                         ret.append(Status(-1, msg, CAT_TRADE_LOSS, profit, self.hookUrls))
+
+                if self.isHeroFactionName(factionName):
+                    if self.outbreakCommodities != 0 and isOutbreakCommodity(commodity):
+                        msg = f"{self.systemName}: {factionName}: Delivered {count} of {commodity} to remedy outbreak."
+                        ret.append(Status(1, msg, CAT_OUTBREAK, count, self.hookUrls))
+                    if self.blightCommodities != 0 and isBlightCommodity(commodity):
+                        msg = f"{self.systemName}: {factionName}: Delivered {count} of {commodity} to remedy blight."
+                        ret.append(Status(1, msg, CAT_BLIGHT, count, self.hookUrls))
+                    if self.draughtCommodities != 0 and isDraughtCommodity(commodity):
+                        msg = f"{self.systemName}: {factionName}: Delivered {count} of {commodity} to remedy draught."
+                        ret.append(Status(1, msg, CAT_DRAUGHT, count, self.hookUrls))
+                    if self.famineCommodities != 0 and isFood(commodity):
+                        msg = f"{self.systemName}: {factionName}: Delivered {count} of {commodity} to remedy famine."
+                        ret.append(Status(1, msg, CAT_FAMINE, count, self.hookUrls))
+                    if self.infrastructureCommodities != 0 and isInfrastructureFailureCommodity(commodity):
+                        msg = f"{self.systemName}: {factionName}: Delivered {count} of {commodity} to remedy infrastructure failure."
+                        ret.append(Status(1, msg, CAT_INFRASTRUCTURE, count, self.hookUrls))
+                    if self.terrorismCommodities != 0 and isTerrorismCommodity(commodity):
+                        msg = f"{self.systemName}: {factionName}: Delivered {count} of {commodity} to remedy terrorism."
+                        ret.append(Status(1, msg, CAT_TERRORISM, count, self.hookUrls))
+                    if self.naturalDisasterCommodities != 0 and isNaturalDisasterCommodity(commodity):
+                        msg = f"{self.systemName}: {factionName}: Delivered {count} of {commodity} to remedy natural disaster."
+                        ret.append(Status(1, msg, CAT_NATURAL_DISASTER, count, self.hookUrls))
 
         return ret
 
@@ -453,6 +512,9 @@ class DailyPlan:
     #    return d
     # default = lambda o: f"<<non-serializable: {type(o).__qualname__}>>"
 
+    #
+    # NOTE: to add fields, have to update this method
+    #
     @staticmethod
     def fromDict(aDict: Dict[str, str]):
         systemName = None
@@ -489,6 +551,20 @@ class DailyPlan:
             strs: List[str] = aDict.get("hookUrls")
             for it in strs:
                 ret.addHookUrl(it)
+        if "outbreakCommodities" in aDict:
+            ret.addOutbreakGoal(aDict.get("outbreakCommodities"))
+        if "blightCommodities" in aDict:
+            ret.addBlightGoal(aDict.get("blightCommodities"))
+        if "draughtCommodities" in aDict:
+            ret.addDraughtGoal(aDict.get("draughtCommodities"))
+        if "famineCommodities" in aDict:
+            ret.addFamineGoal(aDict.get("famineCommodities"))
+        if "infrastructureCommodities" in aDict:
+            ret.addInfrastructureFailureGoal(aDict.get("infrastructureCommodities"))
+        if "terrorismCommodities" in aDict:
+            ret.addTerrorismGoal(aDict.get("terrorismCommodities"))
+        if "naturalDisasterCommodities" in aDict:
+            ret.addNaturalDisasterGoal(aDict.get("naturalDisasterCommodities"))
 
         return ret
 

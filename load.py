@@ -174,7 +174,7 @@ def prefs_changed(cmdr: str, is_beta: bool) -> None:
 
 this = sys.modules[__name__]  # For holding module globals
 this.VersionNo = "0.2"
-response = requests.get('https://api.github.com/repos/tezw21/BGS-Tally/releases/latest')  # check latest version
+response = requests.get('https://api.github.com/repos/HausReport/BgsBuddy/releases/latest')  # check latest version
 latest = response.json()
 this.GitVersion = latest['tag_name']
 
@@ -188,6 +188,7 @@ def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
 
     Title = tk.Label(this.frame, text="BgsBuddy v" + this.VersionNo)
     Title.grid(row=0, column=0, sticky=tk.W)
+    logger.info(f"Git Version: {this.GitVersion}, Current Version: {this.VersionNo}")
     if version_tuple(this.GitVersion) > version_tuple(this.VersionNo):
         title2 = tk.Label(this.frame, text="New version available", fg="blue", cursor="hand2")
         title2.grid(row=0, column=1, sticky=tk.W, )
