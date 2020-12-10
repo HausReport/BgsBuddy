@@ -185,7 +185,7 @@ class DailyPlan:
     blightCommodities = 0
     draughtCommodities = 0
     famineCommodities = 0
-    infrastructureFailureCommodities = 0
+    infrastructureCommodities = 0
     terrorismCommodities = 0
     naturalDisasterCommodities = 0
 
