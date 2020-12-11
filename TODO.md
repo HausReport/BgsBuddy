@@ -5,12 +5,11 @@ Short Term
 1. Figure out what to do with faction states
 1. Add Smuggling lever
 1. Trade - check demand of commodities sold
-1. Research: Wars - how are events like CZ wins, Massacre Missions shown in journal
 1. Generate human-friendly text from daily plan.
 
 Mid Term
 ========
-1. Implement Support for Wars
+1. Implement Support for Wars (war starting in Solati in 12 Dec)
 2. Implement Support for Elections
 3. Upgrade button automatically installs new code
 
@@ -18,7 +17,22 @@ Long Term
 =========
 1. Accumulate contributions in a database somewhere
 2. Graphs of progress, contributions, etc...
-   
+  
+Problems?
+=========
+1. I don't see any indication of winning/losing conflict zones and FSS scenarios in the journal.
+
+v 0.5 ?? Dec 2020
+=================
+1. Combat bond support
+2. Massacre mission support
+3. Scan chatbox for CZ win code?
+
+v 0.4 10 Dec 2020
+=================
+1. Bug fix
+1. Research: Wars - how are events like CZ wins, Massacre Missions shown in journal
+
 v 0.3 10 Dec 2020
 =================
 1. Save system address updates to local addresses.jsonl file.

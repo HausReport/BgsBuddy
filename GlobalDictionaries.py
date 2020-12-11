@@ -5,6 +5,8 @@ import os
 from pprint import pprint
 from typing import Dict, List
 
+from helpers.Target import Target
+
 try:
     from config import appname
 except ImportError:
@@ -12,7 +14,7 @@ except ImportError:
 
 # test
 # Npc name, faction name
-global_target_factions : Dict[str,str] = {}
+global_target_factions : Dict[str,Target] = {}
 try:
     plugin_name
 except NameError:
@@ -98,15 +100,29 @@ def get_address_by_system(sys: str):
 
     return global_system_name_to_address.get(sys)
 
-def add_target_faction(targ: str, fac:str):
+def add_target_faction(name: str, targ: Target ):
     global global_target_factions
     logger.info("Adding target to global dict")
-    global_target_factions[targ] =  fac
+    global_target_factions[name] = targ
 
-def get_target_faction(targ: str):
+def get_target_faction(name: str):
     global global_target_factions
 
-    return global_target_factions[targ]
+    if name in global_target_factions:
+        targ:Target = global_target_factions[name]
+        return targ.getFaction()
+
+    return None #"Unknown Faction"
+
+def get_target_string(name: str):
+    global global_target_factions
+    ret = "Unknown Target"
+
+    if name in global_target_factions:
+        targ:Target = global_target_factions[name]
+        ret = f"( {targ.ship}, {targ.rank})"
+
+    return ret
 
 def clear_target_dictionary():
     global global_target_factions

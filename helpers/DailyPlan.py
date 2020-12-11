@@ -82,6 +82,8 @@ CAT_TERRORISM = "TerrorismCommodities"
 CAT_NATURAL_DISASTER = "NaturalDisasterCommodities"
 #CAT_PIRATE_ATTACK = "Commodities"
 
+CAT_MESSAGE = "Message"
+
 DEFAULT_HOOK_URL = "https://discordapp.com/api/webhooks/784901136946561064/MyLLLTWbJnZWBAgGJlhDxe2rdYOE41qoc03hcNue_rzfWY8HGXayqyLE6VAeO0-72fW1"
 
 #
@@ -201,6 +203,14 @@ class DailyPlan:
         self.logger.warning('And this, too')
         self.logger.error('And non-ASCII stuff, too, like Øresund and Malmö')
         self.hookUrls: List[str] = []  # DEFAULT_HOOK_URL
+
+    # FIXME: Kludge
+    def isWar(self) -> bool:
+        return True
+
+    # FIXME: Kludge
+    def isElection(self) -> bool:
+        return True
 
     def currentlyInTargetSystem(self) -> bool:
         return self.isSystemName(self.currentSystem)
@@ -363,17 +373,41 @@ class DailyPlan:
     def checkBounty(self, entry: Dict) -> List[Status]:
         ret: List[Status] = []
         if self.currentlyInTargetSystem():
+            warTime = ""
+            if self.isWar():
+                warTime = "Wartime "
             for z in entry['Factions']:
                 factionName = z['Faction']
                 bounty = z['Amount']
                 if self.isHeroFactionName(factionName):
-                    msg = f"{self.systemName}: {factionName}: Bounty contribution of {bounty:,} credits."
+                    msg = f"{self.systemName}: {factionName}: {warTime} Bounty contribution of {bounty:,} credits."
                     ret.append(Status(1, msg, CAT_BOUNTY, bounty, self.hookUrls))
                 elif self.isTargetFactionName(factionName):
-                    msg = f"{self.systemName}: {factionName}: Bounty contribution to **ENEMY** of {bounty:,} credits."
+                    msg = f"{self.systemName}: {factionName}: {warTime} Bounty contribution to **ENEMY** of {bounty:,} credits."
                     ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
                 else:
-                    msg = f"{self.systemName}: {factionName}: Bounty contribution to **COMPETITOR** of {bounty:,} credits."
+                    msg = f"{self.systemName}: {factionName}: {warTime} Bounty contribution to **COMPETITOR** of {bounty:,} credits."
+                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
+        return ret
+
+    def checkBond(self, entry: Dict) -> List[Status]:
+        ret: List[Status] = []
+        warTime = ""
+        if self.isWar():
+            warTime = "Wartime "
+
+        if self.currentlyInTargetSystem() and self.isWar():
+            for z in entry['Factions']:
+                factionName = z['Faction']
+                bounty = z['Amount']
+                if self.isHeroFactionName(factionName):
+                    msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution of {bounty:,} credits."
+                    ret.append(Status(1, msg, CAT_BOUNTY, bounty, self.hookUrls))
+                elif self.isTargetFactionName(factionName):
+                    msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution to **ENEMY** of {bounty:,} credits."
+                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
+                else:
+                    msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution to **COMPETITOR** of {bounty:,} credits."
                     ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
         return ret
 
@@ -392,6 +426,13 @@ class DailyPlan:
                 else:
                     msg = f"{self.systemName}: {factionName}: Exploration data sold to **COMPETITOR**: {earnings:,} ."
                     ret.append(Status(-1, msg, CAT_CARTOGRAPHY, earnings, self.hookUrls))
+        return ret
+
+    def sendMessage(self, event, text):
+        ret: List[Status] = []
+        if self.currentlyInTargetSystem():
+            msg = f"{self.systemName}: Message: {text} ."
+            ret.append(Status(1, msg, CAT_MESSAGE, 0, self.hookUrls))
         return ret
 
     def checkTrade(self, entry: Dict) -> List[Status]:
@@ -479,18 +520,20 @@ class DailyPlan:
             self.logger.info("In checkMurder: system good")
             pilotName = event['Victim']
             import GlobalDictionaries
+            # FIXME: double lookup
             pilotFaction = GlobalDictionaries.get_target_faction(pilotName)
+            pilot_xtra = GlobalDictionaries.get_target_string(pilotName)
 
             if pilotFaction is None:
                 self.logger.error(f"Unknown pilot faction in murder check")
             elif self.isTargetFactionName(pilotFaction):
                 ret.append(
-                    Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy", CAT_MURDER, 1, self.hookUrls))
+                    Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy {pilot_xtra}", CAT_MURDER, 1, self.hookUrls))
             elif self.isHeroFactionName(pilotFaction):
                 ret.append(
-                    Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **ALLY**", CAT_MURDER, 1, self.hookUrls))
+                    Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **ALLY** {pilot_xtra}", CAT_MURDER, 1, self.hookUrls))
             else:
-                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER**", CAT_MURDER, 1,
+                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER** {pilot_xtra}", CAT_MURDER, 1,
                                   self.hookUrls))
 
         return ret
@@ -572,3 +615,5 @@ class DailyPlan:
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
+
+

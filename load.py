@@ -33,11 +33,13 @@ import os
 import sys
 import tkinter as tk
 import webbrowser
+from pprint import pprint
 from typing import Optional
 
 import requests
 
 import IoHelpers
+from helpers.Target import Target
 
 try:
     import myNotebook as nb
@@ -249,17 +251,44 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     elif event == 'RedeemVoucher' and entry['Type'] == 'bounty':  # bounties collected
         dailyPlans.checkBounty(entry)
         logger.info(f"Redeem Bounty.")
+    elif event == 'RedeemVoucher' and entry['Type'] == 'CombatBond':  # bonds collected
+        dailyPlans.checkBond(entry)
+        logger.info(f"Redeem Bond.")
     elif event == 'MarketSell':  # Trade Profit
         dailyPlans.checkTrade(entry)
         logger.info(f"Trade.")
     elif event == 'ShipTargeted':  # Target ship
+        # { "timestamp":"2020-11-12T22:09:36Z", "event":"ShipTargeted", "TargetLocked":true,
+        # "Ship":"python", "ScanStage":3, "PilotName":"$ShipName_Police_Federation;",
+        # "PilotName_Localised":"Federal Security Service", "PilotRank":"Competent",
+        # "ShieldHealth":100.000000, "HullHealth":100.000000,
+        # "Faction":"Pleiades Resource Enterprise", "LegalStatus":"Clean" }
+
         if 'PilotName_Localised' in entry and 'Faction' in entry:
             pilotName = entry['PilotName_Localised']
             pilotFaction = entry['Faction']
             logger.info(f"Targeted: {pilotName} from {pilotFaction}")
-            GlobalDictionaries.add_target_faction(pilotName, pilotFaction)
+            ship = "Unknown"
+            if 'Ship' in entry:
+                ship = entry['Ship']
+            rank = "Unknown"
+            if 'PilotRank' in entry:
+                rank = entry['PilotRank']
+            targ: Target = Target(pilotName, pilotFaction, ship, rank)
+            GlobalDictionaries.add_target_faction(pilotName, targ)
     elif event == 'CommitCrime' and entry['CrimeType'] == 'murder':  # Clean Murder
         dailyPlans.checkMurder(entry)
+    elif event == 'SendText':
+        # {"timestamp": "2020-12-08T23:32:07Z", "event": "SendText", "To": "Dan Sho", "Message": "sweet :)",
+        #   "Sent"     : true}
+        msg: str = entry['Message']
+        KEY = 'anticlub'
+        KEYR = 'антиклуб'
+        logger.info(f'Message: >{msg}<')
+        if msg.startswith(KEY):
+            dailyPlans.sendMessage(entry, msg[len(KEY):])
+        elif  msg.startswith(KEYR):
+            dailyPlans.sendMessage(entry, msg[len(KEYR):])
     elif event == 'FSDJump' or event == 'CarrierJump':  # get factions at jump
         #
         # Update system stuff
@@ -273,6 +302,8 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         logger.info(f"{event}: Setting system={systemName}, station=None, stationFaction=None.")
 
         GlobalDictionaries.clear_target_dictionary()
+
+        pprint(entry['Factions'])
     # FIXME: Not sure we'd need list of local faction names
     # FIXME: Having a list of faction states, however would be useful for
     # boom/investment bonuses, detecting war/civil war/exotic states

@@ -76,6 +76,17 @@ class DailyPlans:
             ret = plan.checkMurder(event)
             self.report(ret, plan, event)
 
+    def checkBond(self, event: Dict):
+        for plan in self.plans:
+            ret = plan.checkBond(event)
+            self.report(ret, plan, event)
+
+    def sendMessage(self, event: Dict, text):
+        for plan in self.plans:
+            ret = plan.sendMessage(event, text)
+            self.report(ret, plan, event)
+
+
     def report(self, retList: List[Status], plan: DailyPlan, event: Dict):
         for ret in retList:
             for reporter in self.reporters:
@@ -123,3 +134,4 @@ class DailyPlans:
                     return False
             return True
         return False
+
