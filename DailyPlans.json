@@ -13,19 +13,6 @@
     "murderGoal": 6
 },
 {
-    "systemName": "HR 5975",
-    "heroFaction": "Beyond Infinity Corporation",
-    "targetFaction": "Wreaken Construction",
-    "hookUrls": [
-        "https://discordapp.com/api/webhooks/785361212367831041/dPSrZRbPKpPDG9QIEOf7klmw8S56rS-AiWcj8-3pB1FsiKOFLQv7j9gJDy5XK3eP34Jz"
-    ],
-    "missionInfluenceGoal": 60,
-    "bountyGoal": 16000000,
-    "cartographyGoal": 8000000,
-    "tradeProfitGoal": 16000000,
-    "murderGoal": 12
-},
-{
     "systemName": "LAWD 26",
     "heroFaction": "Minutemen",
     "targetFaction": "Sirius Corporation",
@@ -46,6 +33,7 @@
     "hookUrls": [
         "https://discordapp.com/api/webhooks/785936584716976158/3qQG9ovZB4_PPx7np9tIHXZXeBIq0OcvXFu0vMsD7RKGixYs1_xd-fHn9fLrVZiiOq9R"
     ],
+    "conflictAlly": "New Solati Liberals",
     "missionInfluenceGoal": 60,
     "bountyGoal": 16000000,
     "cartographyGoal": 8000000,

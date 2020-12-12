@@ -57,6 +57,7 @@
     "naturalDisasterCommodities": 4,
     "famineCommodities": 5,
     "draughtCommodities": 6,
-    "infrastructureCommodities": 7
+    "infrastructureCommodities": 7,
+    "conflictAlly": "New Solati Liberals"
 }
 ]

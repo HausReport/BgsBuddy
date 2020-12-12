@@ -2,7 +2,6 @@ import inspect
 import json
 import logging
 import os
-from pprint import pprint
 from typing import Dict, List
 
 from helpers.Target import Target
@@ -122,8 +121,8 @@ ship_types: Dict[str, str] = {
     "cobramkiii"              : "Cobra Mk III",
     "cobramkiv"               : "Cobra Mk IV",
     "cutter"                  : "Imperial Cutter",
-    "diamondback"             : "Diamondback",
-    "diamondbackxl"           : "Diamondback XL",
+    "diamondback"             : "Diamondback Scout",
+    "diamondbackxl"           : "Diamondback Explorer",
     "dolphin"                 : "Dolphin",
     "eagle"                   : "Eagle",
     "empire_courier"          : "Imperial Courier",
@@ -135,7 +134,7 @@ ship_types: Dict[str, str] = {
     "federation_dropship_mkii": "Federal Dropship Mk II",
     "federation_fighter"      : "Federal Fighter",
     "federation_gunship"      : "Federal Gunship",
-    "ferdelance"              : "Fer de Lance",
+    "ferdelance"              : "Fer-de-Lance",
     "gdn_hybrid_fighter_v1"   : "Guardian Hybrid Fighter V1",
     "gdn_hybrid_fighter_v3"   : "Guardian Hybrid Fighter V2",
     "hauler"                  : "Hauler",
@@ -147,13 +146,13 @@ ship_types: Dict[str, str] = {
     "orca"                    : "Orca",
     "python"                  : "Python",
     "sidewinder"              : "Sidewinder",
-    "type6"                   : "Type-6 Trader",
-    "type7"                   : "Type-7 Trader",
-    "type9"                   : "Type-9 Trader",
+    "type6"                   : "Type-6 Transporter",
+    "type7"                   : "Type-7 Transporter",
+    "type9"                   : "Type-9 Heavy",
     "type9_military"          : "Type-9 Military",
-    "typex"                   : "Type X",
-    "typex_2"                 : "Type X2",
-    "typex_3"                 : "Type X3",
+    "typex"                   : "Type 10 Defender",
+    "typex_2"                 : "Type 10 Defender (mod 2)",
+    "typex_3"                 : "Type 10 Defender (mod 3)",
     "viper"                   : "Viper",
     "viper_mkiv"              : "Viper Mk IV",
     "vulture"                 : "Vulture"}

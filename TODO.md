@@ -6,6 +6,8 @@ Short Term
 1. Add Smuggling lever
 1. Trade - check demand of commodities sold
 1. Generate human-friendly text from daily plan.
+1. Reload plans
+1. Detect war state for target faction, detect enemy
 
 Mid Term
 ========

@@ -61,6 +61,7 @@ class TestDailyPlans(TestCase):
         samplePlan4.addFamineGoal(5)
         samplePlan4.addDraughtGoal(6)
         samplePlan4.addInfrastructureFailureGoal(7)
+        samplePlan4.setConflictAlly("New Solati Liberals")
 
         self.dailyPlans: DailyPlans = DailyPlans()
         self.dailyPlans.addReporter(logReporter)

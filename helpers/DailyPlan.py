@@ -80,11 +80,12 @@ CAT_FAMINE = "FamineCommodities"
 CAT_INFRASTRUCTURE = "InfrastructureFailureCommodities"
 CAT_TERRORISM = "TerrorismCommodities"
 CAT_NATURAL_DISASTER = "NaturalDisasterCommodities"
-#CAT_PIRATE_ATTACK = "Commodities"
+# CAT_PIRATE_ATTACK = "Commodities"
 
 CAT_MESSAGE = "Message"
 
 DEFAULT_HOOK_URL = "https://discordapp.com/api/webhooks/784901136946561064/MyLLLTWbJnZWBAgGJlhDxe2rdYOE41qoc03hcNue_rzfWY8HGXayqyLE6VAeO0-72fW1"
+
 
 #
 # For new states
@@ -100,6 +101,7 @@ def isFood(name: str) -> bool:
     foods: Set[str] = {"algae", "animalmeat", "fish", "foodcartridges", "fruitandvegetables", "grain", "syntheticmeat"}
     return name in foods
 
+
 def isMachinery(name: str) -> bool:
     machinery: Set[str] = {
         "articulationmotors", "atmosphericprocessors", "buildingfabricators", "cropharvesters", \
@@ -111,20 +113,24 @@ def isMachinery(name: str) -> bool:
 
 
 def isWeapon(name: str) -> bool:
-    weapons: Set[str] = { "battleweapons", "landmines", "nonlethalweapons", "personalWeapons", "reactivearmour" }
+    weapons: Set[str] = {"battleweapons", "landmines", "nonlethalweapons", "personalWeapons", "reactivearmour"}
     return name in weapons
+
 
 # Outbreak - medicine category
 def isOutbreakCommodity(name: str) -> bool:
     return isMedicine(name)
 
+
 # Blight - "agronomictreatment"
 def isBlightCommodity(name: str) -> bool:
     return name == "agronomictreatment"
 
+
 # Drought - "water"
 def isDraughtCommodity(name: str) -> bool:
     return name == "water"
+
 
 # Infrastructure Failure - food, machinery, medicine
 def isInfrastructureFailureCommodity(name: str) -> bool:
@@ -136,10 +142,12 @@ def isInfrastructureFailureCommodity(name: str) -> bool:
         return True
     return False
 
+
 # Terrorism - sell weapons + combat
 def isTerrorismCommodity(name: str) -> bool:
     if isWeapon(name):
         return True
+
 
 # Natural Disaster - food, medicine
 def isNaturalDisasterCommodity(name: str) -> bool:
@@ -148,6 +156,7 @@ def isNaturalDisasterCommodity(name: str) -> bool:
     if isFood(name):
         return True
     return False
+
 
 # (Pirate Attack)
 # - Different logic - just boost bounty hunting
@@ -160,6 +169,7 @@ class DailyPlan:
     systemName = None
     heroFaction = None
     targetFaction = None
+    conflictAlly = None
 
     #
     # Movement based
@@ -206,7 +216,7 @@ class DailyPlan:
 
     # FIXME: Kludge
     def isWar(self) -> bool:
-        return True
+        return self.conflictAlly is not None
 
     # FIXME: Kludge
     def isElection(self) -> bool:
@@ -229,6 +239,13 @@ class DailyPlan:
             return False
         return name.lower() == self.heroFaction.lower()
 
+    def isConflictAllyFactionName(self, name: str) -> bool:
+        if self.conflictAlly is None:
+            return False
+        if name is None:
+            return False
+        return name.lower() == self.conflictAlly.lower()
+
     def isTargetFactionName(self, name: str) -> bool:
         if self.targetFaction is None:
             return False
@@ -244,6 +261,9 @@ class DailyPlan:
 
     def addHookUrl(self, url: str):
         self.hookUrls.append(url)
+
+    def setConflictAlly(self, name: str):
+        self.conflictAlly = name
 
     #
     # Updated by DailyPlans as ship moves
@@ -396,19 +416,26 @@ class DailyPlan:
         if self.isWar():
             warTime = "Wartime "
 
+        # {
+        #     "timestamp": "2019-07-01T00:06:08Z",
+        #     "event"    : "RedeemVoucher",
+        #     "Type"     : "CombatBond",
+        #     "Amount"   : 459927,
+        #     "Faction"  : "BD-15 447 Company"
+        # }
+
         if self.currentlyInTargetSystem() and self.isWar():
-            for z in entry['Factions']:
-                factionName = z['Faction']
-                bounty = z['Amount']
-                if self.isHeroFactionName(factionName):
-                    msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution of {bounty:,} credits."
-                    ret.append(Status(1, msg, CAT_BOUNTY, bounty, self.hookUrls))
-                elif self.isTargetFactionName(factionName):
-                    msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution to **ENEMY** of {bounty:,} credits."
-                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
-                else:
-                    msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution to **COMPETITOR** of {bounty:,} credits."
-                    ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
+            factionName = entry['Faction']
+            bounty = entry['Amount']
+            if self.isConflictAllyFactionName(factionName):
+                msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution of {bounty:,} credits."
+                ret.append(Status(1, msg, CAT_BOUNTY, bounty, self.hookUrls))
+            elif self.isTargetFactionName(factionName):
+                msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution to **ENEMY** of {bounty:,} credits."
+                ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
+            else:
+                msg = f"{self.systemName}: {factionName}: {warTime} Combat bond contribution to **COMPETITOR** of {bounty:,} credits."
+                ret.append(Status(-1, msg, CAT_BOUNTY, bounty, self.hookUrls))
         return ret
 
     def checkCartography(self, entry: Dict) -> List[Status]:
@@ -528,13 +555,16 @@ class DailyPlan:
                 self.logger.error(f"Unknown pilot faction in murder check")
             elif self.isTargetFactionName(pilotFaction):
                 ret.append(
-                    Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy {pilot_xtra}", CAT_MURDER, 1, self.hookUrls))
+                    Status(1, f"{self.systemName}: {pilotFaction}: Murdered Enemy {pilot_xtra}", CAT_MURDER, 1,
+                           self.hookUrls))
             elif self.isHeroFactionName(pilotFaction):
                 ret.append(
-                    Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **ALLY** {pilot_xtra}", CAT_MURDER, 1, self.hookUrls))
+                    Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **ALLY** {pilot_xtra}", CAT_MURDER, 1,
+                           self.hookUrls))
             else:
-                ret.append(Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER** {pilot_xtra}", CAT_MURDER, 1,
-                                  self.hookUrls))
+                ret.append(
+                    Status(-1, f"{self.systemName}: {pilotFaction}: Murdered **BYSTANDER** {pilot_xtra}", CAT_MURDER, 1,
+                           self.hookUrls))
 
         return ret
 
@@ -576,6 +606,9 @@ class DailyPlan:
 
         ret: DailyPlan = DailyPlan(systemName, heroFaction, targetFaction)
 
+        if "conflictAlly" in aDict:
+            ret.setConflictAlly(aDict.get("conflictAlly"))
+
         if "missionInfluenceGoal" in aDict:
             ret.addMissionInfluenceGoal(aDict.get("missionInfluenceGoal"))
         if "bountyGoal" in aDict:
@@ -615,5 +648,3 @@ class DailyPlan:
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
-
-

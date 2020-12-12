@@ -27,7 +27,7 @@ def loadDailyPlans(fName:str) -> DailyPlans:
 
     print("Data type before reconstruction : ", type(data))
 
-    # reconstructing the data as a list of dictionarues
+    # reconstructing the data as a list of dictionaries
     js = json.loads(data)
 
     #print("Data type after reconstruction : ", type(js))

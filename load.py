@@ -33,6 +33,7 @@ import os
 import sys
 import tkinter as tk
 import webbrowser
+from collections import OrderedDict
 from pprint import pprint
 from typing import Optional
 
@@ -304,6 +305,17 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         GlobalDictionaries.clear_target_dictionary()
 
         pprint(entry['Factions'])
+        # for fac in entry['factions']:
+        #     faction: OrderedDict = fac
+        #     print(faction['Name'])
+        #     print(faction['FactionState'])
+        #     print(faction['Government'])
+        #     print(faction['Influence'])
+        #     print(faction['Allegiance'])
+        #     print(faction['MyReputation'])
+        #     for activeState in faction['ActiveStates']:
+        #         print(activeState[1])
+
     # FIXME: Not sure we'd need list of local faction names
     # FIXME: Having a list of faction states, however would be useful for
     # boom/investment bonuses, detecting war/civil war/exotic states
@@ -327,3 +339,109 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     #     except KeyError:
     #         this.FactionStates['Factions'][z]['States'].append({'State': 'None'})
     #     z += 1
+
+
+
+# Structure of entry['factions']:
+#
+# [OrderedDict([('Name', 'Sirius Corporation'),
+#               ('FactionState', 'Investment'),
+#               ('Government', 'Corporate'),
+#               ('Influence', 0.422422),
+#               ('Allegiance', 'Independent'),
+#               ('Happiness', '$Faction_HappinessBand1;'),
+#               ('Happiness_Localised', 'Elated'),
+#               ('MyReputation', -99.233101),
+#               ('ActiveStates',
+#                [OrderedDict([('State', 'Investment')]),
+#                 OrderedDict([('State', 'CivilLiberty')])])]),
+#  OrderedDict([('Name', 'Luyten 674-15 Industries'),
+#               ('FactionState', 'PirateAttack'),
+#               ('Government', 'Corporate'),
+#               ('Influence', 0.039039),
+#               ('Allegiance', 'Independent'),
+#               ('Happiness', '$Faction_HappinessBand2;'),
+#               ('Happiness_Localised', 'Happy'),
+#               ('MyReputation', 0.0),
+#               ('ActiveStates', [OrderedDict([('State', 'PirateAttack')])])]),
+
+
+
+#
+# Missions event
+#
+# {
+#   "timestamp": "2020-12-12T17:12:29Z",
+#   "event": "Missions",
+#   "Active": [
+#     {
+#       "MissionID": 674018559,
+#       "Name": "MISSION_Salvage_Refinery_name",
+#       "PassengerMission": false,
+#       "Expires": 363122
+#     },
+#     {
+#       "MissionID": 674357771,
+#       "Name": "MISSION_Disable_BLOPS_name",
+#       "PassengerMission": false,
+#       "Expires": 253814
+#     },
+
+
+#
+# After killing a CZ ship
+# Note: this gives an absolute answer to who the war is against
+#
+# {
+#   "timestamp": "2020-12-12T17:15:08Z",
+#   "event": "FactionKillBond",
+#   "Reward": 31113,
+#   "AwardingFaction": "New Solati Liberals",
+#   "VictimFaction": "Hodack Prison Colony"
+# }
+#
+# When targeting a CZ ship
+#
+# {
+#   "timestamp": "2020-12-12T17:15:54Z",
+#   "event": "ShipTargeted",
+#   "TargetLocked": true,
+#   "Ship": "vulture",
+#   "ScanStage": 3,
+#   "PilotName": "$ShipName_Military_Independent;",
+#   "PilotName_Localised": "System Defence Force",
+#   "PilotRank": "Dangerous",
+#   "ShieldHealth": 0,
+#   "HullHealth": 95.307114,
+#   "Faction": "Hodack Prison Colony",
+#   "LegalStatus": "Lawless"
+# }
+
+#
+# When the game is shut down
+#
+# {
+#   "timestamp": "2020-12-12T17:20:04Z",
+#   "event": "Shutdown"
+# }
+
+#
+# When the game is started up
+#
+# {
+#   "timestamp": "2020-12-12T17:12:22Z",
+#   "event": "LoadGame",
+#   "FID": "ZZZZZZ",
+#   "Commander": "Erlaed",
+#   "Horizons": true,
+#   "Ship": "Federation_Corvette",
+#   "Ship_Localised": "Federal Corvette",
+#   "ShipID": 32,
+#   "ShipName": "bounty",
+#   "ShipIdent": "HR-42A",
+#   "FuelLevel": 32,
+#   "FuelCapacity": 32,
+#   "GameMode": "Solo",
+#   "Credits": 4576786079,
+#   "Loan": 0
+# }
