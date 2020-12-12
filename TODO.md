@@ -11,7 +11,7 @@ Mid Term
 ========
 1. Implement Support for Wars (war starting in Solati in 12 Dec)
 2. Implement Support for Elections
-3. Upgrade button automatically installs new code
+3. Upgrade button automatically installs new codebase
 
 Long Term
 =========
@@ -26,7 +26,7 @@ v 0.5 ?? Dec 2020
 =================
 1. Combat bond support
 2. Massacre mission support
-3. Scan chatbox for CZ win code?
+3. Scan chatbox for CZ win code
 
 v 0.4 10 Dec 2020
 =================
