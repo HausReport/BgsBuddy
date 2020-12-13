@@ -1,4 +1,6 @@
-[
+{
+"foo" : "5",
+"plans" : [
 {
     "systemName": "Kipsigines",
     "heroFaction": "Alliance of CD-33 8748",
@@ -60,4 +62,4 @@
     "infrastructureCommodities": 7,
     "conflictAlly": "New Solati Liberals"
 }
-]
+]}

@@ -29,3 +29,7 @@ class TestDailyPlan(TestCase):
         dv = self.samplePlan.reprJSON()
         print("--->" + dv + "<----")
         #pprint(dv)
+
+    def test_to_string(self):
+        ret = self.samplePlan.toString()
+        print(ret)

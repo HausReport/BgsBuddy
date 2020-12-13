@@ -39,6 +39,7 @@ class DailyPlans:
     def size(self):
         return len(self.plans)
 
+    # https://gist.github.com/6a68/4971859
     def setEtag(self, etg: str):
         self.etag = etg
 
@@ -121,7 +122,9 @@ class DailyPlans:
     # Marshalling/unmarshalling of plans as JSON(L)
     #
     def reprJSON(self):
-        ret = "[\n"
+        ret = "{\n"
+        ret = ret + "\"foo\" : \"5\",\n"
+        ret = ret + "\"plans\" : [\n"
         first: bool = True
         for dp in self.plans:
             if not first:
@@ -129,6 +132,7 @@ class DailyPlans:
             first = False
             ret = ret + dp.reprJSON()
         ret = ret + "\n]"
+        ret = ret + "}\n"
         return ret
 
         #             d['plans'].append(dp.reprJSON())

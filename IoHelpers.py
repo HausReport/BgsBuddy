@@ -34,8 +34,14 @@ def loadDailyPlans(fName:str) -> DailyPlans:
     #print(js)
     dp = DailyPlans()
     for item in js:
-        adp = DailyPlan.fromDict(item)
-        dp.addPlan(adp)
+        if item=='foo':
+            dp.setEtag(js['foo'])
+            #print(f">{item}<")
+        elif item=="plans":
+            plz = js['plans']
+            for pl in plz:
+                adp = DailyPlan.fromDict(pl)
+                dp.addPlan(adp)
     return dp
 
 def downloadDailyPlans(fName="DailyPlans.json"):

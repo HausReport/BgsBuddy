@@ -172,6 +172,12 @@ class DailyPlan:
     conflictAlly = None
 
     #
+    # Textual info
+    #
+    overview = None
+    notes = None
+
+    #
     # Movement based
     #
     currentSystem = None
@@ -208,10 +214,10 @@ class DailyPlan:
         # import GlobalDictionaries  # NOTE: this is fucked, but only way it works with edmc unless i put code in a different git
         self.logger = GlobalDictionaries.logger
         self.logger.info("Initialized DailyPlan")
-        self.logger.debug('This message should go to the log file')
-        self.logger.info('So should this')
-        self.logger.warning('And this, too')
-        self.logger.error('And non-ASCII stuff, too, like Øresund and Malmö')
+        # self.logger.debug('This message should go to the log file')
+        # self.logger.info('So should this')
+        # self.logger.warning('And this, too')
+        # self.logger.error('And non-ASCII stuff, too, like Øresund and Malmö')
         self.hookUrls: List[str] = []  # DEFAULT_HOOK_URL
 
     # FIXME: Kludge
@@ -220,7 +226,7 @@ class DailyPlan:
 
     # FIXME: Kludge
     def isElection(self) -> bool:
-        return True
+        return self.conflictAlly is not None
 
     def currentlyInTargetSystem(self) -> bool:
         return self.isSystemName(self.currentSystem)
@@ -265,6 +271,20 @@ class DailyPlan:
     def setConflictAlly(self, name: str):
         self.conflictAlly = name
 
+    def setOverview(self, txt: str):
+        self.overview = txt
+
+    def setNote(self, txt: str):
+        self.notes = txt
+
+    def getOverview(self) -> str:
+        if self.overview is None:
+           return f"Supporting {self.heroFaction} against {self.targetFaction} in {self.systemName}."
+        else:
+            return self.overview
+
+    def getNote(self) -> str:
+        return self.notes
     #
     # Updated by DailyPlans as ship moves
     #
@@ -572,6 +592,7 @@ class DailyPlan:
     # Marshalling/unmarshalling of plans as JSON(L)
     #
     def reprJSON(self):
+        # hasattr bit automatically saves new simple fields
         d = dict()
         for a, v in self.__dict__.items():
             if a == "logger":
@@ -590,6 +611,7 @@ class DailyPlan:
     #
     @staticmethod
     def fromDict(aDict: Dict[str, str]):
+        # to add a new field, add a check here
         systemName = None
         heroFaction = None
         targetFaction = None
@@ -598,7 +620,7 @@ class DailyPlan:
             systemName = aDict.get("systemName")
         if "heroFaction" in aDict:
             heroFaction = aDict.get("heroFaction")
-        if "systemName" in aDict:
+        if "targetFaction" in aDict:
             targetFaction = aDict.get("targetFaction")
 
         if systemName is None or heroFaction is None or targetFaction is None:
@@ -608,6 +630,12 @@ class DailyPlan:
 
         if "conflictAlly" in aDict:
             ret.setConflictAlly(aDict.get("conflictAlly"))
+
+        if "overview" in aDict:
+            ret.setConflictAlly(aDict.get("overview"))
+
+        if "notes" in aDict:
+            ret.setConflictAlly(aDict.get("notes"))
 
         if "missionInfluenceGoal" in aDict:
             ret.addMissionInfluenceGoal(aDict.get("missionInfluenceGoal"))
@@ -641,6 +669,68 @@ class DailyPlan:
             ret.addTerrorismGoal(aDict.get("terrorismCommodities"))
         if "naturalDisasterCommodities" in aDict:
             ret.addNaturalDisasterGoal(aDict.get("naturalDisasterCommodities"))
+
+        return ret
+
+    def toString(self):
+        ret = ""
+        # to add a new field, add a check here
+
+        if self.systemName is None:
+            return "No systemName"
+        if self.heroFaction is None:
+            return "No heroFaction"
+        if self.targetFaction is None:
+            return "No targetFaction"
+
+
+        # FIXME: get conflict type/status from elitebgs?
+        if self.isWar():
+            ret = ret + f"Supporting {self.conflictAlly} in conflict against {self.targetFaction}\n\n"
+        else:
+            ret = ret + self.getOverview() + "\n"
+
+        if self.missionInfluenceGoal > 0:
+            ret = ret + f"Mission Influence  : Goal {self.missionInfluenceGoal:,}\n"
+
+        if self.bountyGoal > 0:
+            ret = ret + f"Bounties           : Goal {self.bountyGoal:,}\n"
+        if self.cartographyGoal > 0:
+            ret = ret + f"Exploration Data   : Goal {self.cartographyGoal:,}\n"
+
+        #
+        # Trade goals
+        #
+        if self.tradeProfitGoal > 0:
+            ret = ret + f"Trade for Profit   : Goal {self.tradeProfitGoal:,}\n"
+
+        if self.outbreakCommodities > 0:
+            ret = ret + f"Sell medicines     : Goal {self.outbreakCommodities:,}\n"
+        if self.blightCommodities > 0:
+            ret = ret + f"Sell Agro Treatment: Goal {self.blightCommodities:,}\n"
+        if self.draughtCommodities > 0:
+            ret = ret + f"Sell water         : Goal {self.draughtCommodities:,}\n"
+        if self.famineCommodities > 0:
+            ret = ret + f"Sell food          : Goal {self.famineCommodities:,}\n"
+        if self.infrastructureCommodities > 0:
+            ret = ret + f"Sell InfFail Goods : Goal {self.infrastructureCommodities:,}\n"
+        if self.terrorismCommodities > 0:
+            ret = ret + f"Sell Weapons       : Goal {self.terrorismCommodities:,}\n"
+        if self.naturalDisasterCommodities > 0:
+            ret = ret + f"Sell Nat'lDis Goods: Goal {self.naturalDisasterCommodities:,}\n"
+
+        #
+        # Negative levers
+        #
+        if self.tradeLossGoal > 0:
+            ret = ret + f"Trade for Loss     : Goal {self.bountyGoal:,}\n"
+        if self.missionFailGoal > 0:
+            ret = ret + f"Mission Failure    : Goal {self.bountyGoal:,}\n"
+        if self.murderGoal > 0:
+            ret = ret + f"Clean Murders      : Goal {self.bountyGoal:,}\n"
+
+        if self.notes is not None:
+            ret = ret + "\n" + self.getNote() + "\n"
 
         return ret
 

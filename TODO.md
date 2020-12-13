@@ -7,10 +7,13 @@ Short Term
 1. Generate human-friendly text from daily plan.
 1. Reload plans via timestamp (can use etag field in http head)
 1. Detect war state for target faction, detect enemy
+1. Add overview field to plan
+1. Add notes field to plan
+1. Add startdate field to plan
+
 
 Mid Term
 ========
-1. Implement Support for Wars (war starting in Solati in 12 Dec)
 2. Implement Support for Elections
 3. Upgrade button automatically installs new codebase
 
