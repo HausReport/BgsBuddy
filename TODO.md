@@ -4,9 +4,8 @@ Short Term
 1. What makes sense to add to the EDMC GUI?
 1. Figure out what to do with faction states
 1. Add Smuggling lever
-1. Trade - check demand of commodities sold
 1. Generate human-friendly text from daily plan.
-1. Reload plans
+1. Reload plans via timestamp (can use etag field in http head)
 1. Detect war state for target faction, detect enemy
 
 Mid Term
@@ -26,9 +25,11 @@ Problems?
 
 v 0.5 ?? Dec 2020
 =================
+0. Add "conflictAlly" to plans.
 1. Combat bond support
-2. Massacre mission support
-3. Scan chatbox for CZ win code
+** 2. Massacre mission support <============= **
+3. Chats that start with 'anticlub' or 'антиклуб' in an active system go to that system's discords
+
 
 v 0.4 10 Dec 2020
 =================

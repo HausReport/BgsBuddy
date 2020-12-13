@@ -38,12 +38,12 @@ def loadDailyPlans(fName:str) -> DailyPlans:
         dp.addPlan(adp)
     return dp
 
-
-link = "http://www.somesite.com/details.pl?urn=2344"
-
 def downloadDailyPlans(fName="DailyPlans.json"):
     url = "https://raw.githubusercontent.com/HausReport/BgsBuddy/master/"+fName
     f = requests.get(url)
+
+    etag: str = f.headers['Etag']
+
     print("DOWNLOADED JSON")
     print("===========================================")
     data = f.text
@@ -52,6 +52,7 @@ def downloadDailyPlans(fName="DailyPlans.json"):
     js = json.loads(data)
 
     dp = DailyPlans()
+    dp.setEtag(etag)
     for item in js:
         adp = DailyPlan.fromDict(item)
         dp.addPlan(adp)

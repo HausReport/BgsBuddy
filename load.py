@@ -64,7 +64,7 @@ logReporter: LogReporter = LogReporter(logger)
 #logging.info("This is a second log msg")
 
 this = sys.modules[__name__]  # For holding module globals
-this.VersionNo = "0.4"
+this.VersionNo = "0.5"
 
 class BgsBuddy:
     """
@@ -445,3 +445,25 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
 #   "Credits": 4576786079,
 #   "Loan": 0
 # }
+
+#
+# Accepting a mission
+#
+# {
+#   "timestamp": "2020-12-12T19:45:41Z",
+#   "event": "MissionAccepted",
+#   "Faction": "New Solati Liberals",
+#   "Name": "Mission_Massacre_Conflict_CivilWar",
+#   "LocalisedName": "Massacre Hodack Prison Colony ships",
+#   "TargetFaction": "Hodack Prison Colony",
+#   "KillCount": 64,
+#   "DestinationSystem": "Solati",
+#   "DestinationStation": "Solati Reach",
+#   "Expiry": "2020-12-13T16:32:55Z",
+#   "Wing": false,
+#   "Influence": "++",
+#   "Reputation": "++",
+#   "Reward": 31797020,
+#   "MissionID": 675213488
+# }
+

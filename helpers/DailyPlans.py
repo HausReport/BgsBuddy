@@ -26,10 +26,9 @@ from .Reporter import Reporter
 class DailyPlans:
 
     def __init__(self):
-
         self.plans: List[DailyPlan] = []
         self.reporters: List[Reporter] = []
-        # self.reporters: List[Reporter] = .append(reporter)
+        self.etag = "1"
 
     def addPlan(self, plan: DailyPlan):
         self.plans.append(plan)
@@ -39,6 +38,12 @@ class DailyPlans:
 
     def size(self):
         return len(self.plans)
+
+    def setEtag(self, etg: str):
+        self.etag = etg
+
+    def isEtag(self,etg: str) -> bool:
+        return self.etag == etg
 
     #
     # Updated by DailyPlans as ship moves
