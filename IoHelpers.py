@@ -60,7 +60,13 @@ def downloadDailyPlans(fName="DailyPlans.json"):
     dp = DailyPlans()
     dp.setEtag(etag)
     for item in js:
-        adp = DailyPlan.fromDict(item)
-        dp.addPlan(adp)
+        if item == 'foo':
+            dp.setEtag(js['foo'])
+            # print(f">{item}<")
+        elif item == "plans":
+            plz = js['plans']
+            for pl in plz:
+                adp = DailyPlan.fromDict(pl)
+                dp.addPlan(adp)
     return dp
 

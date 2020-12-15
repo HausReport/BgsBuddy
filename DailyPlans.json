@@ -1,4 +1,6 @@
-[
+{
+"foo"   : "bar",
+"plans" : [
 {
     "systemName": "Kipsigines",
     "heroFaction": "Alliance of CD-33 8748",
