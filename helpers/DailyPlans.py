@@ -118,6 +118,14 @@ class DailyPlans:
         for reporter in self.reporters:
             reporter.setCommanderName(cmdr)
 
+    def getSystemList(self) -> List[str]:
+        ret: List[str] = []
+        for plan in self.plans:
+            aSys = plan.getSystemName()
+            ret.append(aSys)
+        ret.sort()
+        return ret
+
     #
     # Marshalling/unmarshalling of plans as JSON(L)
     #

@@ -738,3 +738,6 @@ class DailyPlan:
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
+
+    def getSystemName(self):
+        return self.systemName

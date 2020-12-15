@@ -35,6 +35,7 @@ import tkinter as tk
 import webbrowser
 from collections import OrderedDict
 from pprint import pprint
+#from tkinter.tix import Balloon
 from typing import Optional
 
 import requests
@@ -153,7 +154,7 @@ dailyPlans.addReporter(logReporter)
 disco = DiscordReporter(logger)
 dailyPlans.addReporter(disco)
 
-print(dailyPlans.reprJSON())
+#print(dailyPlans.reprJSON())
 
 #
 # Direct EDMC callbacks to class
@@ -196,6 +197,15 @@ def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
         title2 = tk.Label(this.frame, text="New version available", fg="blue", cursor="hand2")
         title2.grid(row=0, column=1, sticky=tk.W, )
         title2.bind("<Button-1>", lambda e: webbrowser.open_new("https://github.com/HausReport/BgsBuddy/releases"))
+
+    systems = dailyPlans.getSystemList()
+    row = 1
+    for aSys in systems:
+        title2 = tk.Label(this.frame, text=aSys)
+        title2.grid(row=row, column=0, sticky=tk.W, )
+        # balloon = Balloon(this.frame, bg="white", title="Help")
+        # balloon.bind_widget(title2, balloonmsg="Click to Exit")
+        row = row + 1
 
     # tk.Button(this.frame, text='Data Today', command=display_data).grid(row=1, column=0, padx=3)
     # tk.Button(this.frame, text='Data Yesterday', command=display_yesterdaydata).grid(row=1, column=1, padx=3)
