@@ -43,20 +43,6 @@
       "murderGoal": 6
     },
     {
-      "systemName": "Solati",
-      "heroFaction": "Federal Reclamation Co",
-      "targetFaction": "Hodack Prison Colony",
-      "hookUrls": [
-        "https://discordapp.com/api/webhooks/785936584716976158/3qQG9ovZB4_PPx7np9tIHXZXeBIq0OcvXFu0vMsD7RKGixYs1_xd-fHn9fLrVZiiOq9R"
-      ],
-      "conflictAlly": "New Solati Liberals",
-      "missionInfluenceGoal": 60,
-      "bountyGoal": 16000000,
-      "cartographyGoal": 8000000,
-      "tradeProfitGoal": 16000000,
-      "murderGoal": 6
-    },
-    {
       "systemName": "Baijio",
       "heroFaction": "Belanit Interstellar Hanseatic League",
       "targetFaction": "Hodack Prison Colony",
