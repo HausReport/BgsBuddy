@@ -1,68 +1,69 @@
 {
-"foo"   : "bar",
-"plans" : [
-{
-    "systemName": "Kipsigines",
-    "heroFaction": "Alliance of CD-33 8748",
-    "targetFaction": "Hodack Prison Colony",
-    "hookUrls": [
+  "foo": "bar",
+  "plans": [
+    {
+      "systemName": "Kipsigines",
+      "heroFaction": "Alliance of CD-33 8748",
+      "targetFaction": "Hodack Prison Colony",
+      "hookUrls": [
         "https://discordapp.com/api/webhooks/785936080091873310/h43X5LxjVA6a0RQjImXKTofRs7vdu_phRNYihoblsSquVZeGJslbcou0L-zYphrpANR-"
-    ],
-    "missionInfluenceGoal": 60,
-    "bountyGoal": 16000000,
-    "cartographyGoal": 8000000,
-    "tradeProfitGoal": 8000000,
-    "murderGoal": 6
-},
-{
-    "systemName": "LAWD 26",
-    "heroFaction": "Minutemen",
-    "targetFaction": "Sirius Corporation",
-    "hookUrls": [
+      ],
+      "missionInfluenceGoal": 60,
+      "bountyGoal": 16000000,
+      "cartographyGoal": 8000000,
+      "tradeProfitGoal": 8000000,
+      "murderGoal": 6
+    },
+    {
+      "systemName": "LAWD 26",
+      "heroFaction": "Minutemen",
+      "targetFaction": "Sirius Corporation",
+      "hookUrls": [
         "https://discordapp.com/api/webhooks/785228043128012820/uFmUix9PqWhh1cAoYYx1Hsh43VVmGPwCnNQlq5is1vBhqKUTeC2h0-VgDXfmQttuq9UX"
-    ],
-    "missionInfluenceGoal": 90,
-    "bountyGoal": 16000000,
-    "cartographyGoal": 8000000,
-    "tradeProfitGoal": 0,
-    "tradeLossGoal": 16000000,
-    "murderGoal": 32
-},
-{
-    "systemName": "Solati",
-    "heroFaction": "Federal Reclamation Co",
-    "targetFaction": "Hodack Prison Colony",
-    "hookUrls": [
+      ],
+      "missionInfluenceGoal": 90,
+      "bountyGoal": 16000000,
+      "cartographyGoal": 8000000,
+      "tradeProfitGoal": 0,
+      "tradeLossGoal": 16000000,
+      "murderGoal": 32
+    },
+    {
+      "systemName": "Solati",
+      "heroFaction": "Federal Reclamation Co",
+      "targetFaction": "Hodack Prison Colony",
+      "hookUrls": [
         "https://discordapp.com/api/webhooks/785936584716976158/3qQG9ovZB4_PPx7np9tIHXZXeBIq0OcvXFu0vMsD7RKGixYs1_xd-fHn9fLrVZiiOq9R"
-    ],
-    "conflictAlly": "New Solati Liberals",
-    "missionInfluenceGoal": 60,
-    "bountyGoal": 16000000,
-    "cartographyGoal": 8000000,
-    "tradeProfitGoal": 16000000,
-    "murderGoal": 6
-},
-{
-    "systemName": "Solati",
-    "heroFaction": "Federal Reclamation Co",
-    "targetFaction": "Hodack Prison Colony",
-    "hookUrls": [
+      ],
+      "conflictAlly": "New Solati Liberals",
+      "missionInfluenceGoal": 60,
+      "bountyGoal": 16000000,
+      "cartographyGoal": 8000000,
+      "tradeProfitGoal": 16000000,
+      "murderGoal": 6
+    },
+    {
+      "systemName": "Solati",
+      "heroFaction": "Federal Reclamation Co",
+      "targetFaction": "Hodack Prison Colony",
+      "hookUrls": [
         "https://discordapp.com/api/webhooks/785936584716976158/3qQG9ovZB4_PPx7np9tIHXZXeBIq0OcvXFu0vMsD7RKGixYs1_xd-fHn9fLrVZiiOq9R"
-    ],
-    "conflictAlly": "New Solati Liberals",
-    "missionInfluenceGoal": 60,
-    "bountyGoal": 16000000,
-    "cartographyGoal": 8000000,
-    "tradeProfitGoal": 16000000,
-    "murderGoal": 6
-},
-{
-    "systemName": "Baijio",
-    "heroFaction": "Belanit Interstellar Hanseatic League",
-    "targetFaction": "Hodack Prison Colony",
-    "hookUrls": [
+      ],
+      "conflictAlly": "New Solati Liberals",
+      "missionInfluenceGoal": 60,
+      "bountyGoal": 16000000,
+      "cartographyGoal": 8000000,
+      "tradeProfitGoal": 16000000,
+      "murderGoal": 6
+    },
+    {
+      "systemName": "Baijio",
+      "heroFaction": "Belanit Interstellar Hanseatic League",
+      "targetFaction": "Hodack Prison Colony",
+      "hookUrls": [
         "https://discord.com/api/webhooks/788423275578523648/Dndzr0HZtC1nPTTyfU-jx4mDaW9BQoroUtWnUSebep2YC7sxrzLnU-R0ls14zT0nTF2J"
-    ],
-    "conflictAlly": "Belanit Interstellar Hanseatic League",
+      ],
+      "conflictAlly": "Belanit Interstellar Hanseatic League"
+    }
+  ]
 }
-]
