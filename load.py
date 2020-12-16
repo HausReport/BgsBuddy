@@ -65,7 +65,7 @@ logReporter: LogReporter = LogReporter(logger)
 #logging.info("This is a second log msg")
 
 this = sys.modules[__name__]  # For holding module globals
-this.VersionNo = "0.5"
+this.VersionNo = "0.6"
 
 class BgsBuddy:
     """

@@ -1,14 +1,14 @@
 Short Term
 ==========
 1. Support for failed missions - requires adding a global dictionary.
-1. What makes sense to add to the EDMC GUI?
 1. Figure out what to do with faction states
 1. Add Smuggling lever
 1. Generate human-friendly text from daily plan.
-1. Reload plans via timestamp (can use etag field in http head)
 1. Detect war state for target faction, detect enemy
 1. Add startdate field to plan
 ** 2. Massacre mission support <============= **
+1. Reload plans via timestamp (can use etag field in http head)
+1. What makes sense to add to the EDMC GUI?
 
 
 Mid Term
@@ -25,6 +25,10 @@ Problems?
 =========
 1. I don't see any indication of winning/losing conflict zones and FSS scenarios in the journal.
 
+v 0.6 16 Dec 2020
+=================
+
+
 v 0.5 13 Dec 2020
 =================
 1. Add "conflictAlly" to plans.
@@ -32,7 +36,6 @@ v 0.5 13 Dec 2020
 3. Chats that start with 'anticlub' or 'антиклуб' in an active system go to that system's discords
 4. Add overview field to plan
 5. Add notes field to plan
-
 
 v 0.4 10 Dec 2020
 =================
