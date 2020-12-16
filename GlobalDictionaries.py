@@ -108,7 +108,25 @@ def get_address_by_system(sys: str):
 
     return global_system_name_to_address.get(sys)
 
+def initials(foo: str):
+    xs = (foo)
+    name_list = xs.split()
 
+    initials = ""
+
+    for name in name_list:  # go through each name
+        if any(not str.isalpha(c) for c in name):
+            initials += name
+        else:
+            initials += name[0].upper()  # append the initial
+
+    return initials
+
+def print_system_initials():
+    global_system_name_to_address
+    for key in global_system_name_to_address.keys():
+        short = initials(key)
+        print(f"{key} - {short}")
 #
 # Keeps track of information about targeted ships
 #

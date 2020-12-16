@@ -198,11 +198,15 @@ def plugin_app(parent: tk.Frame) -> Optional[tk.Frame]:
         title2.grid(row=0, column=1, sticky=tk.W, )
         title2.bind("<Button-1>", lambda e: webbrowser.open_new("https://github.com/HausReport/BgsBuddy/releases"))
 
-    systems = dailyPlans.getSystemList()
+    xplans = dailyPlans.plans #getSystemList()
     row = 1
-    for aSys in systems:
+    for plan in xplans:
+        aSys = plan.getSystemName()
+        aShort = plan.tinyDescription()
         title2 = tk.Label(this.frame, text=aSys)
         title2.grid(row=row, column=0, sticky=tk.W, )
+        title3 = tk.Label(this.frame, text=aShort)
+        title3.grid(row=row, column=1, sticky=tk.W, )
         # balloon = Balloon(this.frame, bg="white", title="Help")
         # balloon.bind_widget(title2, balloonmsg="Click to Exit")
         row = row + 1

@@ -352,6 +352,24 @@ class DailyPlan:
     def addNaturalDisasterGoal(self, amt: int = 0):
         self.naturalDisasterCommodities = amt
 
+
+    def tinyDescription(self):
+        ally = self.heroFaction
+        war = False
+        if self.conflictAlly is not None:
+            ally = self.conflictAlly
+            war = True
+
+        ally = GlobalDictionaries.initials(ally)
+        targ = GlobalDictionaries.initials(self.targetFaction)
+
+        ret = ""
+        if war:
+            ret = f"{ally}-war-{targ}"
+        else:
+            ret = f"{ally}-v-{targ}"
+        return ret
+
     #
     # Lever checks
     # return -1 for harmful action

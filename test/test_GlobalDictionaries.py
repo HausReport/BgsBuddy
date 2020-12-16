@@ -5,8 +5,7 @@
 
 from unittest import TestCase
 
-from craid.bgsBuddy import GlobalDictionaries
-
+import GlobalDictionaries
 
 class Test(TestCase):
 
@@ -31,3 +30,6 @@ class Test(TestCase):
         foo = GlobalDictionaries.get_address_by_system(nam)
         print(f"Returned value: {foo} expecting: {add}")
         assert add == foo
+
+    def test_initials(self):
+        GlobalDictionaries.print_system_initials()

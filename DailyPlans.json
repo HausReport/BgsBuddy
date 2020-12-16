@@ -23,6 +23,7 @@
       ],
       "missionInfluenceGoal": 90,
       "bountyGoal": 16000000,
+      "conflictAlly": "Minutemen",
       "cartographyGoal": 8000000,
       "tradeProfitGoal": 0,
       "tradeLossGoal": 16000000,
@@ -35,7 +36,6 @@
       "hookUrls": [
         "https://discordapp.com/api/webhooks/785936584716976158/3qQG9ovZB4_PPx7np9tIHXZXeBIq0OcvXFu0vMsD7RKGixYs1_xd-fHn9fLrVZiiOq9R"
       ],
-      "conflictAlly": "New Solati Liberals",
       "missionInfluenceGoal": 60,
       "bountyGoal": 16000000,
       "cartographyGoal": 8000000,
